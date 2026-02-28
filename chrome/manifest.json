@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "My Purchases Collector",
+  "description": "Automatically collect and export your AliExpress orders to CSV, JSON, HTML, or clipboard. Compatible with My Purchases web app.",
+  "version": "0.1.0",
+  "icons": {
+    "16": "public/icons/icon16.png",
+    "48": "public/icons/icon48.png",
+    "128": "public/icons/icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.aliexpress.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.ts"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_icon": {
+      "16": "public/icons/icon16.png",
+      "48": "public/icons/icon48.png",
+      "128": "public/icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.aliexpress.com/*"],
+      "js": ["src/content/main-world.ts"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.aliexpress.com/*"],
+      "js": ["src/content/isolated-world.ts"],
+      "world": "ISOLATED",
+      "run_at": "document_start"
+    }
+  ]
+}
