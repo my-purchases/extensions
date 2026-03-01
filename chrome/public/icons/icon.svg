@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#2563EB"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect x="4" y="4" width="120" height="120" rx="24" ry="24" fill="url(#bg)"/>
+  <!-- Shopping bag body -->
+  <path d="M36 50 L36 96 C36 100.4 39.6 104 44 104 L84 104 C88.4 104 92 100.4 92 96 L92 50 Z" 
+        fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bag handles -->
+  <path d="M50 50 L50 38 C50 30.3 55.4 24 64 24 C72.6 24 78 30.3 78 38 L78 50" 
+        fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Download arrow (collect) -->
+  <path d="M64 62 L64 86" 
+        stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <path d="M54 78 L64 88 L74 78" 
+        fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
