@@ -20,7 +20,7 @@ FEATURES
 • Automatic API interception — order data captured in real-time as pages load
 • One-click "Collect All" button to load all orders automatically
 • Export to CSV, JSON, HTML, or clipboard
-• Compatible with the My Resources web app (https://my-purchases.github.io/web/)
+• Compatible with the My Resources web app (https://my-purchases.mobulum.com/)
 • Filter orders by status (e.g. "Awaiting delivery")
 • Clean popup UI with order cards showing images, prices, and status
 
@@ -45,10 +45,10 @@ Shopping
 English
 
 ## Privacy Policy URL
-https://my-purchases.github.io/web/privacy
+https://my-purchases.mobulum.com/privacy
 
 ## Website URL
-https://my-purchases.github.io/web/extension
+https://my-purchases.mobulum.com/extension
 
 ## Screenshots Guide
 Take screenshots at 1280x800 or 640x400:

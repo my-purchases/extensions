@@ -1,6 +1,6 @@
 # My Purchases Collector — Chrome Extension
 
-A Chrome extension that automatically collects your AliExpress order data by intercepting API responses, and exports them to CSV, JSON, HTML, or clipboard. Fully compatible with the [My Resources](https://my-purchases.github.io/web/) web app import format.
+A Chrome extension that automatically collects your AliExpress order data by intercepting API responses, and exports them to CSV, JSON, HTML, or clipboard. Fully compatible with the [My Resources](https://my-purchases.mobulum.com/) web app import format.
 
 ## Features
 
@@ -114,7 +114,7 @@ npm test
 
 ## Privacy
 
-All data is stored locally in your browser using `chrome.storage.local`. No data is transmitted to any server. No analytics or tracking of any kind. See the full [privacy policy](https://my-purchases.github.io/web/privacy).
+All data is stored locally in your browser using `chrome.storage.local`. No data is transmitted to any server. No analytics or tracking of any kind. See the full [privacy policy](https://my-purchases.mobulum.com/privacy).
 
 ## License
 
