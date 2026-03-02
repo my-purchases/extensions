@@ -31,9 +31,10 @@ PRIVACY
 • Open source under MIT license
 
 PERMISSIONS EXPLAINED
-• Storage: Save your collected orders locally
-• Tabs: Communicate between the popup and AliExpress pages
-• Host access (aliexpress.com): Read order data from API responses
+• Storage: Saves collected orders and collection status locally in your browser using chrome.storage.local. This is the extension's primary data store — orders persist between browser sessions without any external server.
+• Unlimited Storage: Removes the default 10 MB quota on local storage. The "Collect All" feature can capture your entire AliExpress order history, which for power users with thousands of orders may exceed the standard limit.
+• Tabs: Required for the auto-collect feature — the extension needs to find your open AliExpress order page (chrome.tabs.query) and send start/stop commands to the content script (chrome.tabs.sendMessage). Also used to open the AliExpress orders page from the popup.
+• Host access (aliexpress.com): Allows content scripts to run on AliExpress pages and intercept API responses containing order data.
 
 SOURCE CODE
 https://github.com/my-purchases/extensions/tree/master/chrome
