@@ -39,8 +39,6 @@
 
 import type { OrderItem } from '@/types/order';
 
-const LOG_PREFIX = '[MPC:temu:parser]';
-
 // ─── Types for Temu API response ────────────────────────────
 
 interface TemuOrderGoods {
@@ -109,11 +107,8 @@ export function parseTemuApiResponse(body: unknown): OrderItem[] {
   const viewOrders = response.view_orders;
 
   if (!Array.isArray(viewOrders) || viewOrders.length === 0) {
-    console.log(LOG_PREFIX, 'No view_orders found in response');
     return [];
   }
-
-  console.log(LOG_PREFIX, `Parsing ${viewOrders.length} parent orders`);
 
   const items: OrderItem[] = [];
 
@@ -135,7 +130,6 @@ export function parseTemuApiResponse(body: unknown): OrderItem[] {
     }
   }
 
-  console.log(LOG_PREFIX, `Parsed ${items.length} order items from ${viewOrders.length} parent orders`);
   return items;
 }
 

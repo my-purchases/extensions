@@ -3,5 +3,4 @@ export {
   isTemuOrderApiUrl,
   isTemuDiscoveryUrl,
   looksLikeTemuOrderResponse,
-  logDiscoveryResponse,
 } from './interceptor';

@@ -41,8 +41,6 @@ chrome.runtime.onMessage.addListener(
     _sender: chrome.runtime.MessageSender,
     sendResponse: (response: RuntimeResponse) => void,
   ) => {
-    console.debug(LOG_PREFIX, 'Received message:', message.type);
-
     handleMessage(message)
       .then(sendResponse)
       .catch((err) => {
@@ -68,7 +66,6 @@ async function handleMessage(
         let parsed: OrderItem[] = [];
         if (providerId === 'temu') {
           parsed = parseTemuApiResponse(message._rawApiResponse);
-          console.debug(LOG_PREFIX, `Temu parser returned ${parsed.length} orders (discovery mode)`);
         } else {
           parsed = parseApiResponse(message._rawApiResponse);
         }
@@ -98,7 +95,7 @@ async function handleMessage(
         autoCollectState.totalOrders = allOrders.length;
       }
 
-      console.debug(LOG_PREFIX, `Merged ${orders.length} orders (${addedCount} new). Total: ${allOrders.length}`);
+      console.debug(LOG_PREFIX, `Merged: ${addedCount} new, ${allOrders.length} total`);
 
       // Notify popup about update via badge
       try {
@@ -251,7 +248,6 @@ async function handleMessage(
         totalOrders: allOrders.length,
         error: message.error,
       };
-      console.debug(LOG_PREFIX, `Auto-collect progress: page ${message.page}, total ${allOrders.length}, done=${message.done}`);
       return { success: true, autoCollect: autoCollectState };
     }
 
@@ -292,7 +288,6 @@ async function findOrderTab(): Promise<chrome.tabs.Tab | undefined> {
 // ─── Extension install / update ─────────────────────────────
 
 chrome.runtime.onInstalled.addListener((details) => {
-  console.debug(LOG_PREFIX, 'Extension installed/updated:', details.reason);
   if (details.reason === 'install') {
     updateStatus({
       providerId: 'aliexpress',

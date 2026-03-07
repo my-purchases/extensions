@@ -1,8 +1,6 @@
 import type { OrderItem } from '@/types/order';
 import { BIZPLUGIN_ORDER_KEY_PREFIX } from '@/shared/constants';
 
-const LOG_PREFIX = '[MPC:parser]';
-
 /**
  * Parse AliExpress API response into OrderItem[].
  *
@@ -14,30 +12,18 @@ const LOG_PREFIX = '[MPC:parser]';
 export function parseApiResponse(body: unknown): OrderItem[] {
   if (!body || typeof body !== 'object') return [];
 
-  console.log(LOG_PREFIX, 'Parsing API response, top keys:', Object.keys(body as object));
-
   // Strategy 1: BizPlugin/droplet format
   const bizPluginOrders = parseBizPluginFormat(body);
-  if (bizPluginOrders.length > 0) {
-    console.log(LOG_PREFIX, `BizPlugin format: found ${bizPluginOrders.length} orders`);
-    return bizPluginOrders;
-  }
+  if (bizPluginOrders.length > 0) return bizPluginOrders;
 
   // Strategy 2: Classic API format
   const classicOrders = parseClassicFormat(body);
-  if (classicOrders.length > 0) {
-    console.log(LOG_PREFIX, `Classic format: found ${classicOrders.length} orders`);
-    return classicOrders;
-  }
+  if (classicOrders.length > 0) return classicOrders;
 
   // Strategy 3: Deep scan — look for anything that looks like an order
   const deepOrders = parseDeepScan(body);
-  if (deepOrders.length > 0) {
-    console.log(LOG_PREFIX, `Deep scan: found ${deepOrders.length} orders`);
-    return deepOrders;
-  }
+  if (deepOrders.length > 0) return deepOrders;
 
-  console.log(LOG_PREFIX, 'No orders found in response');
   return [];
 }
 
@@ -87,29 +73,12 @@ function parseBizPluginFormat(body: unknown): OrderItem[] {
     const orderKeys = Object.keys(data).filter((k) => k.startsWith(BIZPLUGIN_ORDER_KEY_PREFIX));
     if (orderKeys.length === 0) continue;
 
-    console.log(LOG_PREFIX, `Found ${orderKeys.length} BizPlugin order keys`);
-
     for (const key of orderKeys) {
       const entry = data[key] as Record<string, unknown> | undefined;
       if (!entry) continue;
 
       const orderId = String(entry.id ?? key.replace(BIZPLUGIN_ORDER_KEY_PREFIX, ''));
       const fields = entry.fields as Record<string, unknown> | undefined;
-
-      if (fields) {
-        console.log(LOG_PREFIX, `Order ${orderId} fields keys:`, Object.keys(fields));
-
-        // Log orderLines structure for debugging image extraction
-        const orderLines = fields.orderLines as unknown[];
-        if (Array.isArray(orderLines) && orderLines.length > 0) {
-          const firstLine = orderLines[0] as Record<string, unknown>;
-          console.log(LOG_PREFIX, `Order ${orderId} orderLines[0] keys:`, Object.keys(firstLine));
-          // Log nested fields if present
-          if (firstLine.fields && typeof firstLine.fields === 'object') {
-            console.log(LOG_PREFIX, `Order ${orderId} orderLines[0].fields keys:`, Object.keys(firstLine.fields as object));
-          }
-        }
-      }
 
       const items = mapBizPluginEntry(orderId, fields);
       orders.push(...items);
@@ -160,8 +129,6 @@ function mapBizPluginEntry(
       // orderLines entries may have their own `fields` or be flat objects
       const lineFields = (line.fields as Record<string, unknown> | undefined) ?? line;
       const lf = lineFields;
-
-      console.log(LOG_PREFIX, `Order ${orderId} line ${i} keys:`, Object.keys(lf));
 
       // Extract product data from line — try known field names and fallbacks
       const title = str(lf.title) || str(lf.productTitle) || str(lf.productName)

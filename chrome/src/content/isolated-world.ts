@@ -32,8 +32,6 @@ window.addEventListener('message', (event: MessageEvent) => {
   const data = event.data;
   if (!data || data.type !== MSG_PREFIX) return;
 
-  console.debug(LOG_PREFIX, 'Received from main-world:', data.action);
-
   try {
     if (data.action === 'ORDERS_CAPTURED') {
       const message: RuntimeMessage & { _rawApiResponse?: unknown; _providerId?: string } = {
@@ -117,7 +115,6 @@ function findNextPageButton(): HTMLElement | null {
     try {
       const el = document.querySelector<HTMLElement>(selector);
       if (el && isVisible(el) && !isDisabled(el)) {
-        console.log(LOG_PREFIX, 'Found "load more" button via selector:', selector);
         return el;
       }
     } catch {
@@ -134,12 +131,10 @@ function findNextPageButton(): HTMLElement | null {
       isVisible(btn) &&
       !isDisabled(btn)
     ) {
-      console.log(LOG_PREFIX, 'Found "load more" button via text search:', text);
       return btn;
     }
   }
 
-  console.log(LOG_PREFIX, 'No "load more" button found — all orders loaded');
   return null;
 }
 
@@ -195,13 +190,10 @@ function sleep(ms: number): Promise<void> {
 async function runAutoCollect(): Promise<void> {
   autoCollectRunning = true;
   autoCollectPage = 0;
-
-  console.log(LOG_PREFIX, `Auto-collect started (provider: ${currentProvider})`);
   reportProgress(0, false);
 
   while (autoCollectRunning) {
     autoCollectPage++;
-    console.log(LOG_PREFIX, `Auto-collect: batch ${autoCollectPage} — looking for "load more" button...`);
 
     // Scroll to bottom so the button is visible
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -209,12 +201,10 @@ async function runAutoCollect(): Promise<void> {
 
     const loadMoreBtn = findNextPageButton();
     if (!loadMoreBtn) {
-      console.log(LOG_PREFIX, 'Auto-collect: no more button found — all orders loaded');
       reportProgress(autoCollectPage - 1, true);
       break;
     }
 
-    console.log(LOG_PREFIX, `Auto-collect: clicking button (batch ${autoCollectPage})...`);
 
     // Scroll the button into view and click
     loadMoreBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -223,10 +213,8 @@ async function runAutoCollect(): Promise<void> {
 
     // Wait for new data to arrive via the API interception
     const loaded = await waitForDataLoad(8000);
-    if (loaded) {
-      console.log(LOG_PREFIX, `Auto-collect: batch ${autoCollectPage} data received`);
-    } else {
-      console.log(LOG_PREFIX, `Auto-collect: batch ${autoCollectPage} timeout, trying to continue...`);
+    if (!loaded) {
+      // Timeout — try to continue anyway
     }
 
     reportProgress(autoCollectPage, false);
@@ -236,11 +224,9 @@ async function runAutoCollect(): Promise<void> {
   }
 
   autoCollectRunning = false;
-  console.log(LOG_PREFIX, `Auto-collect finished. Batches: ${autoCollectPage}`);
 }
 
 function stopAutoCollect(): void {
-  console.log(LOG_PREFIX, 'Auto-collect stopped by user');
   autoCollectRunning = false;
 }
 
@@ -291,4 +277,3 @@ chrome.runtime.onMessage.addListener(
   },
 );
 
-console.debug(LOG_PREFIX, `Bridge + auto-collect active (provider: ${currentProvider}), listening for messages`);

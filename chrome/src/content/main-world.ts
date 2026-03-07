@@ -50,8 +50,6 @@ function isAliExpressOrderApiUrl(url: string): boolean {
   return ALIEXPRESS_API_PATTERNS.some((pattern) => normalized.includes(pattern));
 }
 
-// ─── Temu URL matching (discovery mode) ─────────────────────
-
 // ─── Temu URL matching ──────────────────────────────────────
 // Real endpoint: POST /pl/api/bg/aristotle/user_order_list
 // Locale prefix varies (/pl/, /de/, /en/, etc.)
@@ -61,40 +59,20 @@ const TEMU_API_PATTERNS = [
   'api/bg/aristotle/order',
 ];
 
-const TEMU_DISCOVERY_PATTERNS = [
-  '/api/bg/aristotle/',
-  '/api/bg/',
-  'temu.com/api/',
-];
-
 function isTemuOrderApiUrl(url: string): boolean {
   if (!url) return false;
   const normalized = url.startsWith('//') ? 'https:' + url : url;
   return TEMU_API_PATTERNS.some((pattern) => normalized.includes(pattern));
 }
 
-function isTemuDiscoveryUrl(url: string): boolean {
-  if (!url) return false;
-  const normalized = url.startsWith('//') ? 'https:' + url : url;
-  return TEMU_DISCOVERY_PATTERNS.some((pattern) => normalized.includes(pattern));
-}
-
 // ─── Unified URL check ──────────────────────────────────────
 
 /**
  * Check if a URL is an order API URL for the current provider.
- * Returns 'order' for exact order API match, 'discovery' for broad match (Temu only),
- * or false for no match.
  */
-function checkUrl(url: string): 'order' | 'discovery' | false {
-  if (currentProvider === 'aliexpress') {
-    return isAliExpressOrderApiUrl(url) ? 'order' : false;
-  }
-  if (currentProvider === 'temu') {
-    if (isTemuOrderApiUrl(url)) return 'order';
-    if (isTemuDiscoveryUrl(url)) return 'discovery';
-    return false;
-  }
+function checkUrl(url: string): boolean {
+  if (currentProvider === 'aliexpress') return isAliExpressOrderApiUrl(url);
+  if (currentProvider === 'temu') return isTemuOrderApiUrl(url);
   return false;
 }
 
@@ -155,49 +133,6 @@ function containsTemuOrderData(body: unknown): boolean {
   return false;
 }
 
-// ─── Temu discovery logging ─────────────────────────────────
-
-function logTemuDiscovery(url: string, body: unknown, source: string): void {
-  const separator = '='.repeat(80);
-
-  console.log(
-    `\n${separator}\n` +
-    `${LOG_PREFIX} TEMU DISCOVERY: API response captured\n` +
-    `  Source: ${source}\n` +
-    `  URL: ${url}\n` +
-    `  Timestamp: ${new Date().toISOString()}\n` +
-    `${separator}`,
-  );
-
-  if (body && typeof body === 'object') {
-    const obj = body as Record<string, unknown>;
-    const topKeys = Object.keys(obj);
-    console.log(LOG_PREFIX, 'Top-level keys:', topKeys);
-
-    for (const key of topKeys) {
-      const val = obj[key];
-      if (val && typeof val === 'object' && !Array.isArray(val)) {
-        console.log(LOG_PREFIX, `  ${key} keys:`, Object.keys(val as object));
-      } else if (Array.isArray(val)) {
-        console.log(LOG_PREFIX, `  ${key}: Array[${val.length}]`);
-        if (val.length > 0 && typeof val[0] === 'object') {
-          console.log(LOG_PREFIX, `  ${key}[0] keys:`, Object.keys(val[0] as object));
-        }
-      } else {
-        console.log(LOG_PREFIX, `  ${key}:`, typeof val, '=', String(val).slice(0, 100));
-      }
-    }
-
-    if (containsTemuOrderData(body)) {
-      console.log(
-        `\n${LOG_PREFIX} *** TEMU ORDER DATA DETECTED ***\n` +
-        `${LOG_PREFIX} Full response logged below for analysis:\n`,
-      );
-      console.log(LOG_PREFIX, 'FULL_RESPONSE:', JSON.stringify(body, null, 2));
-    }
-  }
-}
-
 // ─── Unified data check & post ──────────────────────────────
 
 function containsOrderData(body: unknown): boolean {
@@ -210,8 +145,6 @@ function postOrderData(jsonBody: unknown, source: string): void {
   if (!containsOrderData(jsonBody)) {
     return;
   }
-
-  console.log(LOG_PREFIX, `Order data detected via ${source}`, jsonBody);
 
   window.postMessage(
     {
@@ -226,21 +159,13 @@ function postOrderData(jsonBody: unknown, source: string): void {
 }
 
 /**
- * Process an intercepted response — handles both order detection and discovery logging.
+ * Process an intercepted response — detect order data and forward it.
  */
 function processInterceptedResponse(url: string, body: unknown, source: string): void {
   const match = checkUrl(url);
   if (!match) return;
 
-  if (currentProvider === 'temu') {
-    // In discovery mode: log everything, and also try to detect order data
-    logTemuDiscovery(url, body, source);
-    // Still try to post if it looks like order data
-    if (containsTemuOrderData(body)) {
-      postOrderData(body, source);
-    }
-  } else {
-    // AliExpress: established flow
+  if (containsOrderData(body)) {
     postOrderData(body, source);
   }
 }
@@ -292,7 +217,6 @@ window.fetch = async function patchedFetch(
     const match = checkUrl(url);
 
     if (match) {
-      console.log(LOG_PREFIX, `Intercepted fetch (${match}):`, url);
       const clone = response.clone();
       clone.text().then((text) => {
         const parsed = tryParseResponse(text);
@@ -330,8 +254,6 @@ XMLHttpRequest.prototype.send = function patchedSend(
   const url = xhr._mpcUrl;
 
   if (url && checkUrl(url)) {
-    console.log(LOG_PREFIX, 'Intercepted XHR:', url);
-
     xhr.addEventListener('load', () => {
       try {
         let parsed: unknown = null;
@@ -358,7 +280,7 @@ if (currentProvider === 'aliexpress') {
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
         if (node instanceof HTMLScriptElement && node.src && isAliExpressOrderApiUrl(node.src)) {
-          console.log(LOG_PREFIX, 'Detected JSONP script tag:', node.src);
+          // Detected JSONP script tag for order API
         }
       }
     }
@@ -378,7 +300,6 @@ if (currentProvider === 'aliexpress') {
     (window as unknown as Record<string, unknown>)[key] = function (this: unknown, ...args: unknown[]) {
       try {
         if (args[0]) {
-          console.log(LOG_PREFIX, 'JSONP callback intercepted:', key);
           postOrderData(args[0], 'jsonp-' + key);
         }
       } catch {
@@ -433,11 +354,4 @@ window.postMessage(
   '*',
 );
 
-console.log(LOG_PREFIX, `API interception active on ${window.location.href} (provider: ${currentProvider})`);
-if (currentProvider === 'temu') {
-  console.log(LOG_PREFIX, 'TEMU DISCOVERY MODE — logging all API traffic for analysis');
-  console.log(LOG_PREFIX, 'Order patterns:', TEMU_API_PATTERNS);
-  console.log(LOG_PREFIX, 'Discovery patterns:', TEMU_DISCOVERY_PATTERNS);
-} else if (currentProvider === 'aliexpress') {
-  console.log(LOG_PREFIX, 'Monitoring patterns:', ALIEXPRESS_API_PATTERNS);
-}
+console.log(LOG_PREFIX, `Active (provider: ${currentProvider})`);
