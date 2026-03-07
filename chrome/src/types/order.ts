@@ -37,10 +37,12 @@ export interface OrderItem {
   ignoreExport: boolean;
   /** User-assigned tags */
   tags: string[];
+  /** Which provider this order came from */
+  providerId?: ProviderId;
 }
 
 /** Supported provider IDs */
-export type ProviderId = 'aliexpress';
+export type ProviderId = 'aliexpress' | 'temu';
 
 /** Collection status per provider */
 export interface CollectionStatus {

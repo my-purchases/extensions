@@ -2,10 +2,12 @@
  * Service Worker (Manifest V3 background script).
  * Receives orders from content scripts, manages storage, handles export requests from popup.
  * Forwards auto-collect commands to content scripts via chrome.tabs.sendMessage.
+ * Supports multiple providers: AliExpress (full parsing) and Temu (discovery mode).
  */
 
 import type { RuntimeMessage, RuntimeResponse, AutoCollectState } from '@/shared/messages';
 import { parseApiResponse } from '@/providers/aliexpress/parser';
+import { parseTemuApiResponse } from '@/providers/temu/parser';
 import {
   getOrders,
   mergeOrders,
@@ -39,8 +41,6 @@ chrome.runtime.onMessage.addListener(
     _sender: chrome.runtime.MessageSender,
     sendResponse: (response: RuntimeResponse) => void,
   ) => {
-    console.debug(LOG_PREFIX, 'Received message:', message.type);
-
     handleMessage(message)
       .then(sendResponse)
       .catch((err) => {
@@ -54,15 +54,21 @@ chrome.runtime.onMessage.addListener(
 );
 
 async function handleMessage(
-  message: RuntimeMessage & { _rawApiResponse?: unknown },
+  message: RuntimeMessage & { _rawApiResponse?: unknown; _providerId?: string },
 ): Promise<RuntimeResponse> {
   switch (message.type) {
     case 'ORDERS_CAPTURED': {
-      // Parse raw API response if available, otherwise use pre-parsed orders
+      // Parse raw API response if available, routing to the correct provider parser
       let orders: OrderItem[] = message.orders ?? [];
+      const providerId = message._providerId || 'aliexpress';
 
       if (message._rawApiResponse) {
-        const parsed = parseApiResponse(message._rawApiResponse);
+        let parsed: OrderItem[] = [];
+        if (providerId === 'temu') {
+          parsed = parseTemuApiResponse(message._rawApiResponse);
+        } else {
+          parsed = parseApiResponse(message._rawApiResponse);
+        }
         if (parsed.length > 0) {
           orders = parsed;
         }
@@ -71,6 +77,9 @@ async function handleMessage(
       if (orders.length === 0) {
         return { success: true, orders: [] };
       }
+
+      // Tag orders with provider ID
+      orders = orders.map((o) => ({ ...o, providerId: (o.providerId || providerId) as 'aliexpress' | 'temu' }));
 
       const addedCount = await mergeOrders(orders);
       const allOrders = await getOrders();
@@ -86,7 +95,7 @@ async function handleMessage(
         autoCollectState.totalOrders = allOrders.length;
       }
 
-      console.debug(LOG_PREFIX, `Merged ${orders.length} orders (${addedCount} new). Total: ${allOrders.length}`);
+      console.debug(LOG_PREFIX, `Merged: ${addedCount} new, ${allOrders.length} total`);
 
       // Notify popup about update via badge
       try {
@@ -109,8 +118,11 @@ async function handleMessage(
 
       // Apply filters if provided
       if (message.filters) {
-        const { search, status, dateFrom, dateTo } = message.filters;
+        const { search, status, dateFrom, dateTo, providerId } = message.filters;
 
+        if (providerId) {
+          orders = orders.filter((o) => (o.providerId || 'aliexpress') === providerId);
+        }
         if (search) {
           const q = search.toLowerCase();
           orders = orders.filter(
@@ -192,9 +204,9 @@ async function handleMessage(
     // ─── Auto-collect ─────────────────────────────────────────
 
     case 'START_AUTO_COLLECT': {
-      const tab = await findAliExpressOrderTab();
+      const tab = await findOrderTab();
       if (!tab?.id) {
-        return { success: false, error: 'No AliExpress orders page found. Open the orders page first.' };
+        return { success: false, error: 'No orders page found. Open the AliExpress or Temu orders page first.' };
       }
 
       try {
@@ -211,7 +223,7 @@ async function handleMessage(
     }
 
     case 'STOP_AUTO_COLLECT': {
-      const tab = await findAliExpressOrderTab();
+      const tab = await findOrderTab();
       if (tab?.id) {
         try {
           await chrome.tabs.sendMessage(tab.id, { type: 'STOP_AUTO_COLLECT' });
@@ -236,7 +248,6 @@ async function handleMessage(
         totalOrders: allOrders.length,
         error: message.error,
       };
-      console.debug(LOG_PREFIX, `Auto-collect progress: page ${message.page}, total ${allOrders.length}, done=${message.done}`);
       return { success: true, autoCollect: autoCollectState };
     }
 
@@ -247,18 +258,36 @@ async function handleMessage(
 
 // ─── Helpers ────────────────────────────────────────────────
 
-async function findAliExpressOrderTab(): Promise<chrome.tabs.Tab | undefined> {
-  const tabs = await chrome.tabs.query({
+async function findOrderTab(): Promise<chrome.tabs.Tab | undefined> {
+  // Try AliExpress first
+  const aliTabs = await chrome.tabs.query({
     url: '*://*.aliexpress.com/p/order/*',
   });
-  // Prefer the active one, otherwise take the first match
-  return tabs.find((t) => t.active) ?? tabs[0];
+  if (aliTabs.length > 0) {
+    return aliTabs.find((t) => t.active) ?? aliTabs[0];
+  }
+
+  // Try Temu
+  const temuTabs = await chrome.tabs.query({
+    url: [
+      '*://*.temu.com/*/bgt_orders.html*',
+      '*://*.temu.com/bgt_orders.html*',
+      '*://*.temu.com/*/orders.html*',
+      '*://*.temu.com/orders.html*',
+      '*://*.temu.com/*/order*',
+      '*://*.temu.com/order*',
+    ],
+  });
+  if (temuTabs.length > 0) {
+    return temuTabs.find((t) => t.active) ?? temuTabs[0];
+  }
+
+  return undefined;
 }
 
 // ─── Extension install / update ─────────────────────────────
 
 chrome.runtime.onInstalled.addListener((details) => {
-  console.debug(LOG_PREFIX, 'Extension installed/updated:', details.reason);
   if (details.reason === 'install') {
     updateStatus({
       providerId: 'aliexpress',
