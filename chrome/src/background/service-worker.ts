@@ -2,12 +2,13 @@
  * Service Worker (Manifest V3 background script).
  * Receives orders from content scripts, manages storage, handles export requests from popup.
  * Forwards auto-collect commands to content scripts via chrome.tabs.sendMessage.
- * Supports multiple providers: AliExpress (full parsing) and Temu (discovery mode).
+ * Supports multiple providers: AliExpress (full parsing), Temu, and Allegro (PL + CZ).
  */
 
 import type { RuntimeMessage, RuntimeResponse, AutoCollectState } from '@/shared/messages';
 import { parseApiResponse } from '@/providers/aliexpress/parser';
 import { parseTemuApiResponse } from '@/providers/temu/parser';
+import { parseAllegroApiResponse } from '@/providers/allegro/parser';
 import {
   getOrders,
   mergeOrders,
@@ -21,7 +22,7 @@ import { exportToCsv } from '@/export/csv';
 import { exportToJson } from '@/export/json';
 import { exportToHtml } from '@/export/html';
 import { exportToClipboard } from '@/export/clipboard';
-import type { OrderItem } from '@/types/order';
+import type { OrderItem, ProviderId } from '@/types/order';
 
 const LOG_PREFIX = '[MPC:sw]';
 
@@ -66,6 +67,8 @@ async function handleMessage(
         let parsed: OrderItem[] = [];
         if (providerId === 'temu') {
           parsed = parseTemuApiResponse(message._rawApiResponse);
+        } else if (providerId === 'allegro-pl' || providerId === 'allegro-cz') {
+          parsed = parseAllegroApiResponse(message._rawApiResponse, providerId as ProviderId);
         } else {
           parsed = parseApiResponse(message._rawApiResponse);
         }
@@ -79,7 +82,7 @@ async function handleMessage(
       }
 
       // Tag orders with provider ID
-      orders = orders.map((o) => ({ ...o, providerId: (o.providerId || providerId) as 'aliexpress' | 'temu' }));
+      orders = orders.map((o) => ({ ...o, providerId: (o.providerId || providerId) as ProviderId }));
 
       const addedCount = await mergeOrders(orders);
       const allOrders = await getOrders();
@@ -206,7 +209,7 @@ async function handleMessage(
     case 'START_AUTO_COLLECT': {
       const tab = await findOrderTab();
       if (!tab?.id) {
-        return { success: false, error: 'No orders page found. Open the AliExpress or Temu orders page first.' };
+        return { success: false, error: 'No orders page found. Open the AliExpress, Temu, or Allegro orders page first.' };
       }
 
       try {
@@ -280,6 +283,28 @@ async function findOrderTab(): Promise<chrome.tabs.Tab | undefined> {
   });
   if (temuTabs.length > 0) {
     return temuTabs.find((t) => t.active) ?? temuTabs[0];
+  }
+
+  // Try Allegro PL
+  const allegroPLTabs = await chrome.tabs.query({
+    url: [
+      '*://*.allegro.pl/moje-allegro/zakupy/kupione*',
+      '*://*.allegro.pl/moje-allegro/zakupy/*',
+    ],
+  });
+  if (allegroPLTabs.length > 0) {
+    return allegroPLTabs.find((t) => t.active) ?? allegroPLTabs[0];
+  }
+
+  // Try Allegro CZ
+  const allegroCZTabs = await chrome.tabs.query({
+    url: [
+      '*://*.allegro.cz/moje-allegro/nakupy/historie-nakupu*',
+      '*://*.allegro.cz/moje-allegro/nakupy/*',
+    ],
+  });
+  if (allegroCZTabs.length > 0) {
+    return allegroCZTabs.find((t) => t.active) ?? allegroCZTabs[0];
   }
 
   return undefined;

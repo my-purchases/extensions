@@ -5,9 +5,8 @@
  * Sends captured data to the isolated-world script via window.postMessage().
  *
  * Multi-provider support:
- *   - Detects the current site (AliExpress, Temu) from window.location.hostname
+ *   - Detects the current site (AliExpress, Temu, Allegro) from window.location.hostname
  *   - Uses provider-specific URL patterns and data detection
- *   - For Temu: discovery mode with verbose logging of all API traffic
  *
  * AliExpress findings:
  *   - API endpoint: acs.aliexpress.com/h5/mtop.aliexpress.trade.buyer.order.list
@@ -20,12 +19,14 @@ const LOG_PREFIX = '[MPC:main]';
 
 // ─── Provider detection ─────────────────────────────────────
 
-type Provider = 'aliexpress' | 'temu' | 'unknown';
+type Provider = 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz' | 'unknown';
 
 function detectProvider(): Provider {
   const hostname = window.location.hostname;
   if (hostname.includes('aliexpress.com')) return 'aliexpress';
   if (hostname.includes('temu.com')) return 'temu';
+  if (hostname.includes('allegro.pl')) return 'allegro-pl';
+  if (hostname.includes('allegro.cz')) return 'allegro-cz';
   return 'unknown';
 }
 
@@ -67,12 +68,37 @@ function isTemuOrderApiUrl(url: string): boolean {
 
 // ─── Unified URL check ──────────────────────────────────────
 
+// ─── Allegro URL matching ───────────────────────────────────
+// Real endpoint: GET edge.allegro.{pl|cz}/myorder-api/myorders
+// API is on edge.allegro.* subdomain but we intercept fetch from allegro.* pages
+
+const ALLEGRO_API_PATTERNS = [
+  'myorder-api/myorders',
+  'myorder-api/myorder/',
+];
+
+function isAllegroOrderApiUrl(url: string): boolean {
+  if (!url) return false;
+  const normalized = url.startsWith('//') ? 'https:' + url : url;
+  try {
+    const u = new URL(normalized);
+    if (!u.hostname.includes('allegro.pl') && !u.hostname.includes('allegro.cz')) return false;
+    const full = u.pathname + u.search;
+    return ALLEGRO_API_PATTERNS.some((pattern) => full.includes(pattern));
+  } catch {
+    return ALLEGRO_API_PATTERNS.some((pattern) => normalized.includes(pattern));
+  }
+}
+
+// ─── Unified URL check (all providers) ──────────────────────
+
 /**
  * Check if a URL is an order API URL for the current provider.
  */
 function checkUrl(url: string): boolean {
   if (currentProvider === 'aliexpress') return isAliExpressOrderApiUrl(url);
   if (currentProvider === 'temu') return isTemuOrderApiUrl(url);
+  if (currentProvider === 'allegro-pl' || currentProvider === 'allegro-cz') return isAllegroOrderApiUrl(url);
   return false;
 }
 
@@ -133,11 +159,27 @@ function containsTemuOrderData(body: unknown): boolean {
   return false;
 }
 
+// ─── Allegro data detection ─────────────────────────────────
+// Checks for the `orderGroups` array — the confirmed response format
+// from the `myorders` endpoint.
+
+function containsAllegroOrderData(body: unknown): boolean {
+  if (!body || typeof body !== 'object') return false;
+
+  const obj = body as Record<string, unknown>;
+
+  // Primary: orderGroups array at top level
+  if (Array.isArray(obj.orderGroups)) return true;
+
+  return false;
+}
+
 // ─── Unified data check & post ──────────────────────────────
 
 function containsOrderData(body: unknown): boolean {
   if (currentProvider === 'aliexpress') return containsAliExpressOrderData(body);
   if (currentProvider === 'temu') return containsTemuOrderData(body);
+  if (currentProvider === 'allegro-pl' || currentProvider === 'allegro-cz') return containsAllegroOrderData(body);
   return false;
 }
 
@@ -341,6 +383,46 @@ if (currentProvider === 'aliexpress') {
   }
 
   setInterval(hookJsonpCallbacks, 200);
+}
+
+// ─── Allegro: proactively fetch first page ──────────────────
+// Allegro may serve the initial order data via SSR or an early fetch that
+// completes before our interception patch is active. To ensure the first
+// page (offset=0) is always captured, we explicitly re-fetch it once the
+// page is ready. Our patched fetch() will intercept and process the response.
+
+if (currentProvider === 'allegro-pl' || currentProvider === 'allegro-cz') {
+  const ALLEGRO_ORDER_PAGE_PATHS_PL = ['/moje-allegro/zakupy/kupione', '/moje-allegro/zakupy/'];
+  const ALLEGRO_ORDER_PAGE_PATHS_CZ = ['/moje-allegro/nakupy/historie-nakupu', '/moje-allegro/nakupy/'];
+
+  const orderPagePaths = currentProvider === 'allegro-cz'
+    ? ALLEGRO_ORDER_PAGE_PATHS_CZ
+    : ALLEGRO_ORDER_PAGE_PATHS_PL;
+
+  const isOrderPage = orderPagePaths.some((p) => window.location.pathname.startsWith(p));
+
+  if (isOrderPage) {
+    const fetchFirstPage = () => {
+      const domain = currentProvider === 'allegro-cz' ? 'allegro.cz' : 'allegro.pl';
+      const apiUrl = `https://edge.${domain}/myorder-api/myorders?filter=all&limit=15&offset=0&sort=orderdate&order=DESC`;
+      fetch(apiUrl, {
+        headers: {
+          'Accept': 'application/vnd.allegro.public.v3+json',
+        },
+        credentials: 'include',
+      }).catch(() => {
+        // Auth may not be ready yet or CORS error — ignore silently
+      });
+    };
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(fetchFirstPage, 2000);
+    } else {
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(fetchFirstPage, 2000);
+      });
+    }
+  }
 }
 
 // ─── Notify that interception is active ─────────────────────
