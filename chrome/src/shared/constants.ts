@@ -7,6 +7,8 @@ export const STORAGE_KEY_STATUS = 'mpc_status';
 /** Storage key for user settings */
 export const STORAGE_KEY_SETTINGS = 'mpc_settings';
 
+// ─── AliExpress ─────────────────────────────────────────────
+
 /** AliExpress order page URL patterns */
 export const ALIEXPRESS_ORDER_PATTERNS = [
   '*://*.aliexpress.com/p/order/*',
@@ -31,6 +33,40 @@ export const ALIEXPRESS_API_PATTERNS = [
 
 /** Key prefix for BizPlugin/droplet order entries in response data */
 export const BIZPLUGIN_ORDER_KEY_PREFIX = 'pc_om_list_order_';
+
+// ─── Temu ───────────────────────────────────────────────────
+
+/** Temu order page URL patterns */
+export const TEMU_ORDER_PATTERNS = [
+  '*://*.temu.com/*/bgt_orders.html*',
+  '*://*.temu.com/bgt_orders.html*',
+  '*://*.temu.com/*/orders.html*',
+  '*://*.temu.com/orders.html*',
+  '*://*.temu.com/*/order*',
+  '*://*.temu.com/order*',
+] as const;
+
+/**
+ * Temu API URL patterns to intercept.
+ * Based on real traffic observation:
+ *   POST https://www.temu.com/pl/api/bg/aristotle/user_order_list
+ * The locale prefix (/pl/) varies, so we match on the API path suffix.
+ */
+export const TEMU_API_PATTERNS = [
+  'api/bg/aristotle/user_order_list',
+  'api/bg/aristotle/order',
+] as const;
+
+/**
+ * Temu broad API discovery patterns.
+ * In discovery mode, we log Temu API calls that match these broad
+ * patterns so we can identify additional order-related endpoints.
+ */
+export const TEMU_DISCOVERY_PATTERNS = [
+  '/api/bg/aristotle/',
+  '/api/bg/',
+  'temu.com/api/',
+] as const;
 
 /** Default popup dimensions */
 export const POPUP_WIDTH = 420;

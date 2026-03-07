@@ -7,6 +7,14 @@ import { FilterBar } from './components/FilterBar';
 import { StatusBadge } from './components/StatusBadge';
 import { ShoppingBag, RefreshCw, Trash2, ExternalLink, Play, Square, Loader2 } from 'lucide-react';
 
+type ProviderTab = 'all' | 'aliexpress' | 'temu';
+
+const PROVIDER_LABELS: Record<ProviderTab, string> = {
+  all: 'All',
+  aliexpress: 'AliExpress',
+  temu: 'Temu',
+};
+
 function sendMessage(message: RuntimeMessage): Promise<RuntimeResponse> {
   return chrome.runtime.sendMessage(message);
 }
@@ -17,6 +25,7 @@ export default function App() {
   const [filters, setFilters] = useState<OrderFilters>({});
   const [loading, setLoading] = useState(true);
   const [showExport, setShowExport] = useState(false);
+  const [providerTab, setProviderTab] = useState<ProviderTab>('all');
   const [autoCollect, setAutoCollect] = useState<AutoCollectState>({
     isRunning: false,
     currentPage: 0,
@@ -28,7 +37,11 @@ export default function App() {
   const loadOrders = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await sendMessage({ type: 'GET_ORDERS', filters });
+      const appliedFilters: OrderFilters = { ...filters };
+      if (providerTab !== 'all') {
+        appliedFilters.providerId = providerTab;
+      }
+      const res = await sendMessage({ type: 'GET_ORDERS', filters: appliedFilters });
       if (res.success && res.orders) {
         setOrders(res.orders);
       }
@@ -36,7 +49,7 @@ export default function App() {
       console.error('Failed to load orders:', err);
     }
     setLoading(false);
-  }, [filters]);
+  }, [filters, providerTab]);
 
   const loadStatus = useCallback(async () => {
     try {
@@ -138,7 +151,11 @@ export default function App() {
   };
 
   const handleOpenOrders = () => {
-    chrome.tabs.create({ url: 'https://www.aliexpress.com/p/order/index.html' });
+    if (providerTab === 'temu') {
+      chrome.tabs.create({ url: 'https://www.temu.com/bgt_orders.html' });
+    } else {
+      chrome.tabs.create({ url: 'https://www.aliexpress.com/p/order/index.html' });
+    }
   };
 
   const handleStartAutoCollect = async () => {
@@ -176,6 +193,23 @@ export default function App() {
         </div>
         <StatusBadge status={status} orderCount={orders.length} />
       </header>
+
+      {/* Provider tabs */}
+      <div className="flex bg-white border-b border-gray-200">
+        {(['all', 'aliexpress', 'temu'] as ProviderTab[]).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setProviderTab(tab)}
+            className={`flex-1 px-3 py-1.5 text-xs font-medium transition-colors ${
+              providerTab === tab
+                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            {PROVIDER_LABELS[tab]}
+          </button>
+        ))}
+      </div>
 
       {/* Actions bar */}
       <div className="flex items-center gap-2 px-4 py-2 bg-white border-b border-gray-200">
@@ -268,14 +302,17 @@ export default function App() {
             <ShoppingBag size={40} className="text-gray-300 mb-3" />
             <p className="text-sm text-gray-500 mb-1">No orders collected yet</p>
             <p className="text-xs text-gray-400">
-              Open your AliExpress orders page and browse through them.
-              Orders will be captured automatically.
+              {providerTab === 'temu'
+                ? 'Open your Temu orders page and browse through them. Orders will be captured automatically.'
+                : providerTab === 'aliexpress'
+                  ? 'Open your AliExpress orders page and browse through them. Orders will be captured automatically.'
+                  : 'Open your AliExpress or Temu orders page and browse through them. Orders will be captured automatically.'}
             </p>
             <button
               onClick={handleOpenOrders}
               className="mt-4 text-xs px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
-              Go to AliExpress Orders
+              {providerTab === 'temu' ? 'Go to Temu Orders' : 'Go to AliExpress Orders'}
             </button>
           </div>
         ) : (

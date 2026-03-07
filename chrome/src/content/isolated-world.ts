@@ -3,12 +3,26 @@
  * Runs in the extension's isolated context (world: "ISOLATED").
  * - Bridges window.postMessage from main-world to chrome.runtime.sendMessage
  * - Handles auto-collect: finds and clicks the pagination/"View orders" button
+ * - Multi-provider aware: detects AliExpress vs Temu and uses appropriate selectors
  */
 
 import type { RuntimeMessage } from '@/shared/messages';
 
 const MSG_PREFIX = 'MPC_';
 const LOG_PREFIX = '[MPC:isolated]';
+
+// ─── Provider detection ─────────────────────────────────────
+
+type Provider = 'aliexpress' | 'temu' | 'unknown';
+
+function detectProvider(): Provider {
+  const hostname = window.location.hostname;
+  if (hostname.includes('aliexpress.com')) return 'aliexpress';
+  if (hostname.includes('temu.com')) return 'temu';
+  return 'unknown';
+}
+
+const currentProvider = detectProvider();
 
 // ─── Bridge: main-world → service-worker ────────────────────
 
@@ -22,11 +36,13 @@ window.addEventListener('message', (event: MessageEvent) => {
 
   try {
     if (data.action === 'ORDERS_CAPTURED') {
-      const message: RuntimeMessage & { _rawApiResponse?: unknown } = {
+      const message: RuntimeMessage & { _rawApiResponse?: unknown; _providerId?: string } = {
         type: 'ORDERS_CAPTURED',
         orders: data.orders ?? [],
         _rawApiResponse: data._rawApiResponse,
       };
+      // Forward the provider ID so service worker knows which parser to use
+      (message as Record<string, unknown>)._providerId = data._providerId || currentProvider;
       chrome.runtime.sendMessage(message);
     } else if (data.action === 'COLLECTION_STATUS') {
       const message: RuntimeMessage = {
@@ -45,26 +61,59 @@ window.addEventListener('message', (event: MessageEvent) => {
 let autoCollectRunning = false;
 let autoCollectPage = 0;
 
-/**
- * Known selectors for the "View orders" / "Load more" / pagination button
- * on AliExpress order list page. Ordered by specificity — most reliable first.
- */
-const LOAD_MORE_SELECTORS = [
-  // Primary: the exact "View orders" button inside div.order-more
+// ─── AliExpress selectors ───────────────────────────────────
+
+const ALIEXPRESS_LOAD_MORE_SELECTORS = [
   '.order-more button',
   '.order-more .comet-btn',
   'div[data-pl="order_more"] button',
-  // Comet pagination (if they switch to paginated view)
   '.comet-pagination-next:not(.comet-pagination-disabled)',
   '.comet-pagination-next:not(.comet-pagination-disabled) button',
 ];
+
+const ALIEXPRESS_LOAD_MORE_TEXTS = ['View orders', 'Load more', 'Show more'];
+
+// ─── Temu selectors (discovery — best guesses) ──────────────
+
+const TEMU_LOAD_MORE_SELECTORS = [
+  // Common pagination patterns on Temu
+  '[class*="loadMore"]',
+  '[class*="load-more"]',
+  '[class*="LoadMore"]',
+  '[class*="pagination"] button:last-child',
+  '[class*="Pagination"] button:last-child',
+  'button[class*="next"]',
+  'button[class*="Next"]',
+  'a[class*="next"]',
+  'a[class*="Next"]',
+  // Generic pagination
+  '.pagination .next:not(.disabled)',
+  '.pagination-next:not(.disabled)',
+];
+
+const TEMU_LOAD_MORE_TEXTS = ['Load more', 'Show more', 'View more', 'See more', 'Next', 'Next page'];
+
+// ─── Provider-aware selectors ───────────────────────────────
+
+function getLoadMoreSelectors(): string[] {
+  if (currentProvider === 'temu') return TEMU_LOAD_MORE_SELECTORS;
+  return ALIEXPRESS_LOAD_MORE_SELECTORS;
+}
+
+function getLoadMoreTexts(): string[] {
+  if (currentProvider === 'temu') return TEMU_LOAD_MORE_TEXTS;
+  return ALIEXPRESS_LOAD_MORE_TEXTS;
+}
 
 /**
  * Try to find the "View orders" / "Load more" / next-page button on the page.
  */
 function findNextPageButton(): HTMLElement | null {
+  const selectors = getLoadMoreSelectors();
+  const texts = getLoadMoreTexts();
+
   // Strategy 1: Try known selectors
-  for (const selector of LOAD_MORE_SELECTORS) {
+  for (const selector of selectors) {
     try {
       const el = document.querySelector<HTMLElement>(selector);
       if (el && isVisible(el) && !isDisabled(el)) {
@@ -76,12 +125,12 @@ function findNextPageButton(): HTMLElement | null {
     }
   }
 
-  // Strategy 2: Text-based fallback — find any button containing "View orders"
-  const buttons = document.querySelectorAll<HTMLElement>('button');
+  // Strategy 2: Text-based fallback — find any button/link with matching text
+  const buttons = document.querySelectorAll<HTMLElement>('button, a[role="button"]');
   for (const btn of buttons) {
     const text = btn.textContent?.trim() || '';
     if (
-      (text.includes('View orders') || text.includes('Load more') || text.includes('Show more')) &&
+      texts.some((t) => text.includes(t)) &&
       isVisible(btn) &&
       !isDisabled(btn)
     ) {
@@ -147,25 +196,25 @@ async function runAutoCollect(): Promise<void> {
   autoCollectRunning = true;
   autoCollectPage = 0;
 
-  console.log(LOG_PREFIX, 'Auto-collect started');
+  console.log(LOG_PREFIX, `Auto-collect started (provider: ${currentProvider})`);
   reportProgress(0, false);
 
   while (autoCollectRunning) {
     autoCollectPage++;
-    console.log(LOG_PREFIX, `Auto-collect: batch ${autoCollectPage} — looking for "View orders" button...`);
+    console.log(LOG_PREFIX, `Auto-collect: batch ${autoCollectPage} — looking for "load more" button...`);
 
-    // Scroll to bottom so the "View orders" button is visible
+    // Scroll to bottom so the button is visible
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     await sleep(1000);
 
     const loadMoreBtn = findNextPageButton();
     if (!loadMoreBtn) {
-      console.log(LOG_PREFIX, 'Auto-collect: no more "View orders" button — all orders loaded');
+      console.log(LOG_PREFIX, 'Auto-collect: no more button found — all orders loaded');
       reportProgress(autoCollectPage - 1, true);
       break;
     }
 
-    console.log(LOG_PREFIX, `Auto-collect: clicking "View orders" (batch ${autoCollectPage})...`);
+    console.log(LOG_PREFIX, `Auto-collect: clicking button (batch ${autoCollectPage})...`);
 
     // Scroll the button into view and click
     loadMoreBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -242,4 +291,4 @@ chrome.runtime.onMessage.addListener(
   },
 );
 
-console.debug(LOG_PREFIX, 'Bridge + auto-collect active, listening for messages');
+console.debug(LOG_PREFIX, `Bridge + auto-collect active (provider: ${currentProvider}), listening for messages`);

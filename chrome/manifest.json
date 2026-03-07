@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "My Purchases Collector",
-  "description": "Automatically collect and export your AliExpress orders to CSV, JSON, HTML, or clipboard. Compatible with My Purchases web app.",
-  "version": "0.1.0",
+  "description": "Automatically collect and export your AliExpress and Temu orders to CSV, JSON, HTML, or clipboard. Compatible with My Purchases web app.",
+  "version": "0.2.0",
   "icons": {
     "16": "public/icons/icon16.png",
     "48": "public/icons/icon48.png",
@@ -14,7 +14,8 @@
     "tabs"
   ],
   "host_permissions": [
-    "*://*.aliexpress.com/*"
+    "*://*.aliexpress.com/*",
+    "*://*.temu.com/*"
   ],
   "background": {
     "service_worker": "src/background/service-worker.ts"
@@ -36,6 +37,18 @@
     },
     {
       "matches": ["*://*.aliexpress.com/*"],
+      "js": ["src/content/isolated-world.ts"],
+      "world": "ISOLATED",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.temu.com/*"],
+      "js": ["src/content/main-world.ts"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.temu.com/*"],
       "js": ["src/content/isolated-world.ts"],
       "world": "ISOLATED",
       "run_at": "document_start"
