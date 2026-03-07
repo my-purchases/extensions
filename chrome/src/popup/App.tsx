@@ -7,12 +7,14 @@ import { FilterBar } from './components/FilterBar';
 import { StatusBadge } from './components/StatusBadge';
 import { ShoppingBag, RefreshCw, Trash2, ExternalLink, Play, Square, Loader2 } from 'lucide-react';
 
-type ProviderTab = 'all' | 'aliexpress' | 'temu';
+type ProviderTab = 'all' | 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz';
 
 const PROVIDER_LABELS: Record<ProviderTab, string> = {
   all: 'All',
   aliexpress: 'AliExpress',
   temu: 'Temu',
+  'allegro-pl': 'Allegro PL',
+  'allegro-cz': 'Allegro CZ',
 };
 
 function sendMessage(message: RuntimeMessage): Promise<RuntimeResponse> {
@@ -153,6 +155,10 @@ export default function App() {
   const handleOpenOrders = () => {
     if (providerTab === 'temu') {
       chrome.tabs.create({ url: 'https://www.temu.com/bgt_orders.html' });
+    } else if (providerTab === 'allegro-pl') {
+      chrome.tabs.create({ url: 'https://allegro.pl/moje-allegro/zakupy/kupione' });
+    } else if (providerTab === 'allegro-cz') {
+      chrome.tabs.create({ url: 'https://allegro.cz/moje-allegro/nakupy/historie-nakupu' });
     } else {
       chrome.tabs.create({ url: 'https://www.aliexpress.com/p/order/index.html' });
     }
@@ -196,7 +202,7 @@ export default function App() {
 
       {/* Provider tabs */}
       <div className="flex bg-white border-b border-gray-200">
-        {(['all', 'aliexpress', 'temu'] as ProviderTab[]).map((tab) => (
+        {(['all', 'aliexpress', 'temu', 'allegro-pl', 'allegro-cz'] as ProviderTab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setProviderTab(tab)}
@@ -304,15 +310,25 @@ export default function App() {
             <p className="text-xs text-gray-400">
               {providerTab === 'temu'
                 ? 'Open your Temu orders page and browse through them. Orders will be captured automatically.'
-                : providerTab === 'aliexpress'
-                  ? 'Open your AliExpress orders page and browse through them. Orders will be captured automatically.'
-                  : 'Open your AliExpress or Temu orders page and browse through them. Orders will be captured automatically.'}
+                : providerTab === 'allegro-pl'
+                  ? 'Open your Allegro.pl orders page and browse through them. Orders will be captured automatically.'
+                  : providerTab === 'allegro-cz'
+                    ? 'Open your Allegro.cz orders page and browse through them. Orders will be captured automatically.'
+                    : providerTab === 'aliexpress'
+                      ? 'Open your AliExpress orders page and browse through them. Orders will be captured automatically.'
+                      : 'Open your AliExpress, Temu, or Allegro orders page and browse through them. Orders will be captured automatically.'}
             </p>
             <button
               onClick={handleOpenOrders}
               className="mt-4 text-xs px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
-              {providerTab === 'temu' ? 'Go to Temu Orders' : 'Go to AliExpress Orders'}
+              {providerTab === 'temu'
+                ? 'Go to Temu Orders'
+                : providerTab === 'allegro-pl'
+                  ? 'Go to Allegro.pl Orders'
+                  : providerTab === 'allegro-cz'
+                    ? 'Go to Allegro.cz Orders'
+                    : 'Go to AliExpress Orders'}
             </button>
           </div>
         ) : (
@@ -322,7 +338,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="px-4 py-2 bg-white border-t border-gray-200 text-[10px] text-gray-400 text-center">
-        My Purchases Collector v0.1.0
+        My Purchases Collector v0.3.0
       </footer>
     </div>
   );

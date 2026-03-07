@@ -42,7 +42,7 @@ export interface OrderItem {
 }
 
 /** Supported provider IDs */
-export type ProviderId = 'aliexpress' | 'temu';
+export type ProviderId = 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz';
 
 /** Collection status per provider */
 export interface CollectionStatus {

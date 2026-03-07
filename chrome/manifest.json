@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "My Purchases Collector",
-  "description": "Automatically collect and export your AliExpress and Temu orders to CSV, JSON, HTML, or clipboard. Compatible with My Purchases web app.",
-  "version": "0.2.0",
+  "description": "Automatically collect and export your AliExpress, Temu, and Allegro orders to CSV, JSON, HTML, or clipboard.",
+  "version": "0.3.0",
   "icons": {
     "16": "public/icons/icon16.png",
     "48": "public/icons/icon48.png",
@@ -15,7 +15,9 @@
   ],
   "host_permissions": [
     "*://*.aliexpress.com/*",
-    "*://*.temu.com/*"
+    "*://*.temu.com/*",
+    "*://*.allegro.pl/*",
+    "*://*.allegro.cz/*"
   ],
   "background": {
     "service_worker": "src/background/service-worker.ts"
@@ -49,6 +51,30 @@
     },
     {
       "matches": ["*://*.temu.com/*"],
+      "js": ["src/content/isolated-world.ts"],
+      "world": "ISOLATED",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.allegro.pl/*"],
+      "js": ["src/content/main-world.ts"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.allegro.pl/*"],
+      "js": ["src/content/isolated-world.ts"],
+      "world": "ISOLATED",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.allegro.cz/*"],
+      "js": ["src/content/main-world.ts"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.allegro.cz/*"],
       "js": ["src/content/isolated-world.ts"],
       "world": "ISOLATED",
       "run_at": "document_start"

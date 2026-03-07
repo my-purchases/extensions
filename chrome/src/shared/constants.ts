@@ -68,6 +68,27 @@ export const TEMU_DISCOVERY_PATTERNS = [
   'temu.com/api/',
 ] as const;
 
+// ─── Allegro ────────────────────────────────────────────────
+
+/** Allegro order page URL patterns (PL + CZ) */
+export const ALLEGRO_ORDER_PATTERNS = [
+  '*://*.allegro.pl/moje-allegro/zakupy/kupione*',
+  '*://*.allegro.pl/moje-allegro/zakupy/*',
+  '*://*.allegro.cz/moje-allegro/nakupy/historie-nakupu*',
+  '*://*.allegro.cz/moje-allegro/nakupy/*',
+] as const;
+
+/**
+ * Allegro API URL patterns to intercept.
+ * Based on real traffic observation:
+ *   GET https://edge.allegro.pl/myorder-api/myorders?filter=all&limit=15&offset=0
+ * The domain varies: edge.allegro.pl, edge.allegro.cz
+ */
+export const ALLEGRO_API_PATTERNS = [
+  'myorder-api/myorders',
+  'myorder-api/myorder/',
+] as const;
+
 /** Default popup dimensions */
 export const POPUP_WIDTH = 420;
 export const POPUP_HEIGHT = 560;

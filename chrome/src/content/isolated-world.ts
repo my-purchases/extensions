@@ -3,7 +3,7 @@
  * Runs in the extension's isolated context (world: "ISOLATED").
  * - Bridges window.postMessage from main-world to chrome.runtime.sendMessage
  * - Handles auto-collect: finds and clicks the pagination/"View orders" button
- * - Multi-provider aware: detects AliExpress vs Temu and uses appropriate selectors
+ * - Multi-provider aware: detects AliExpress vs Temu vs Allegro and uses appropriate selectors
  */
 
 import type { RuntimeMessage } from '@/shared/messages';
@@ -13,12 +13,14 @@ const LOG_PREFIX = '[MPC:isolated]';
 
 // ─── Provider detection ─────────────────────────────────────
 
-type Provider = 'aliexpress' | 'temu' | 'unknown';
+type Provider = 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz' | 'unknown';
 
 function detectProvider(): Provider {
   const hostname = window.location.hostname;
   if (hostname.includes('aliexpress.com')) return 'aliexpress';
   if (hostname.includes('temu.com')) return 'temu';
+  if (hostname.includes('allegro.pl')) return 'allegro-pl';
+  if (hostname.includes('allegro.cz')) return 'allegro-cz';
   return 'unknown';
 }
 
@@ -91,15 +93,41 @@ const TEMU_LOAD_MORE_SELECTORS = [
 
 const TEMU_LOAD_MORE_TEXTS = ['Load more', 'Show more', 'View more', 'See more', 'Next', 'Next page'];
 
+// ─── Allegro selectors ──────────────────────────────────────
+// Allegro uses offset-based pagination with "Pokaż więcej" / "Zobrazit více" buttons
+// or standard pagination links
+
+const ALLEGRO_LOAD_MORE_SELECTORS = [
+  // "Show more" button patterns
+  '[data-role="load-more"]',
+  '[data-testid="load-more"]',
+  'button[class*="loadMore"]',
+  'button[class*="load-more"]',
+  // Pagination links
+  '[data-role="pagination-next"]',
+  '[data-testid="pagination-next"]',
+  'a[class*="pagination"][class*="next"]',
+  'button[class*="pagination"][class*="next"]',
+  // Generic next page patterns
+  'a[rel="next"]',
+  'button[aria-label="next"]',
+  'button[aria-label="następna"]',
+  'button[aria-label="další"]',
+];
+
+const ALLEGRO_LOAD_MORE_TEXTS = ['Pokaż więcej', 'Zobrazit více', 'Show more', 'Load more', 'Następna', 'Další', 'Next'];
+
 // ─── Provider-aware selectors ───────────────────────────────
 
 function getLoadMoreSelectors(): string[] {
   if (currentProvider === 'temu') return TEMU_LOAD_MORE_SELECTORS;
+  if (currentProvider === 'allegro-pl' || currentProvider === 'allegro-cz') return ALLEGRO_LOAD_MORE_SELECTORS;
   return ALIEXPRESS_LOAD_MORE_SELECTORS;
 }
 
 function getLoadMoreTexts(): string[] {
   if (currentProvider === 'temu') return TEMU_LOAD_MORE_TEXTS;
+  if (currentProvider === 'allegro-pl' || currentProvider === 'allegro-cz') return ALLEGRO_LOAD_MORE_TEXTS;
   return ALIEXPRESS_LOAD_MORE_TEXTS;
 }
 
