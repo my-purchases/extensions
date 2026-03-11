@@ -6,8 +6,7 @@
     "all": "Wszystkie",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegroPl": "Allegro PL",
-    "allegroCz": "Allegro CZ"
+    "allegro": "Allegro"
   },
   "actions": {
     "openOrders": "Otwórz Zamówienia",
@@ -28,13 +27,11 @@
   "empty": {
     "noOrders": "Nie zebrano jeszcze żadnych zamówień",
     "instructionsTemu": "Otwórz stronę zamówień Temu i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
-    "instructionsAllegroPl": "Otwórz stronę zamówień Allegro.pl i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
-    "instructionsAllegroCz": "Otwórz stronę zamówień Allegro.cz i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
+    "instructionsAllegro": "Otwórz stronę zamówień Allegro (allegro.pl lub allegro.cz) i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
     "instructionsAliexpress": "Otwórz stronę zamówień AliExpress i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
     "instructionsAll": "Otwórz stronę zamówień AliExpress, Temu lub Allegro i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
     "goToTemu": "Przejdź do zamówień Temu",
-    "goToAllegroPl": "Przejdź do zamówień Allegro.pl",
-    "goToAllegroCz": "Przejdź do zamówień Allegro.cz",
+    "goToAllegro": "Przejdź do zamówień Allegro",
     "goToAliexpress": "Przejdź do zamówień AliExpress"
   },
   "loading": "Ładowanie...",

@@ -6,8 +6,7 @@
     "all": "전체",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegroPl": "Allegro PL",
-    "allegroCz": "Allegro CZ"
+    "allegro": "Allegro"
   },
   "actions": {
     "openOrders": "주문 열기",
@@ -28,13 +27,11 @@
   "empty": {
     "noOrders": "아직 수집된 주문이 없습니다",
     "instructionsTemu": "Temu 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
-    "instructionsAllegroPl": "Allegro.pl 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
-    "instructionsAllegroCz": "Allegro.cz 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
+    "instructionsAllegro": "Allegro 주문 페이지(allegro.pl 또는 allegro.cz)를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
     "instructionsAliexpress": "AliExpress 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
     "instructionsAll": "AliExpress, Temu 또는 Allegro 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
     "goToTemu": "Temu 주문으로 이동",
-    "goToAllegroPl": "Allegro.pl 주문으로 이동",
-    "goToAllegroCz": "Allegro.cz 주문으로 이동",
+    "goToAllegro": "Allegro 주문으로 이동",
     "goToAliexpress": "AliExpress 주문으로 이동"
   },
   "loading": "로딩 중...",

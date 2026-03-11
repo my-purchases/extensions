@@ -6,8 +6,7 @@
     "all": "Tümü",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegroPl": "Allegro PL",
-    "allegroCz": "Allegro CZ"
+    "allegro": "Allegro"
   },
   "actions": {
     "openOrders": "Siparişleri Aç",
@@ -28,13 +27,11 @@
   "empty": {
     "noOrders": "Henüz sipariş toplanmadı",
     "instructionsTemu": "Temu sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
-    "instructionsAllegroPl": "Allegro.pl sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
-    "instructionsAllegroCz": "Allegro.cz sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
+    "instructionsAllegro": "Allegro sipariş sayfanızı (allegro.pl veya allegro.cz) açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
     "instructionsAliexpress": "AliExpress sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
     "instructionsAll": "AliExpress, Temu veya Allegro sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
     "goToTemu": "Temu Siparişlerine Git",
-    "goToAllegroPl": "Allegro.pl Siparişlerine Git",
-    "goToAllegroCz": "Allegro.cz Siparişlerine Git",
+    "goToAllegro": "Allegro Siparişlerine Git",
     "goToAliexpress": "AliExpress Siparişlerine Git"
   },
   "loading": "Yükleniyor...",

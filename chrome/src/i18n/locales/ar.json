@@ -6,8 +6,7 @@
     "all": "الكل",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegroPl": "Allegro PL",
-    "allegroCz": "Allegro CZ"
+    "allegro": "Allegro"
   },
   "actions": {
     "openOrders": "فتح الطلبات",
@@ -28,13 +27,11 @@
   "empty": {
     "noOrders": "لم يتم جمع أي طلبات بعد",
     "instructionsTemu": "افتح صفحة طلبات Temu وتصفحها. سيتم التقاط الطلبات تلقائياً.",
-    "instructionsAllegroPl": "افتح صفحة طلبات Allegro.pl وتصفحها. سيتم التقاط الطلبات تلقائياً.",
-    "instructionsAllegroCz": "افتح صفحة طلبات Allegro.cz وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "instructionsAllegro": "افتح صفحة طلبات Allegro (allegro.pl أو allegro.cz) وتصفحها. سيتم التقاط الطلبات تلقائياً.",
     "instructionsAliexpress": "افتح صفحة طلبات AliExpress وتصفحها. سيتم التقاط الطلبات تلقائياً.",
     "instructionsAll": "افتح صفحة طلبات AliExpress أو Temu أو Allegro وتصفحها. سيتم التقاط الطلبات تلقائياً.",
     "goToTemu": "الذهاب إلى طلبات Temu",
-    "goToAllegroPl": "الذهاب إلى طلبات Allegro.pl",
-    "goToAllegroCz": "الذهاب إلى طلبات Allegro.cz",
+    "goToAllegro": "الذهاب إلى طلبات Allegro",
     "goToAliexpress": "الذهاب إلى طلبات AliExpress"
   },
   "loading": "جاري التحميل...",

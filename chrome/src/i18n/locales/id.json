@@ -6,8 +6,7 @@
     "all": "Semua",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegroPl": "Allegro PL",
-    "allegroCz": "Allegro CZ"
+    "allegro": "Allegro"
   },
   "actions": {
     "openOrders": "Buka Pesanan",
@@ -28,13 +27,11 @@
   "empty": {
     "noOrders": "Belum ada pesanan yang dikumpulkan",
     "instructionsTemu": "Buka halaman pesanan Temu dan jelajahi. Pesanan akan ditangkap secara otomatis.",
-    "instructionsAllegroPl": "Buka halaman pesanan Allegro.pl dan jelajahi. Pesanan akan ditangkap secara otomatis.",
-    "instructionsAllegroCz": "Buka halaman pesanan Allegro.cz dan jelajahi. Pesanan akan ditangkap secara otomatis.",
+    "instructionsAllegro": "Buka halaman pesanan Allegro (allegro.pl atau allegro.cz) dan jelajahi. Pesanan akan ditangkap secara otomatis.",
     "instructionsAliexpress": "Buka halaman pesanan AliExpress dan jelajahi. Pesanan akan ditangkap secara otomatis.",
     "instructionsAll": "Buka halaman pesanan AliExpress, Temu, atau Allegro dan jelajahi. Pesanan akan ditangkap secara otomatis.",
     "goToTemu": "Buka Pesanan Temu",
-    "goToAllegroPl": "Buka Pesanan Allegro.pl",
-    "goToAllegroCz": "Buka Pesanan Allegro.cz",
+    "goToAllegro": "Buka Pesanan Allegro",
     "goToAliexpress": "Buka Pesanan AliExpress"
   },
   "loading": "Memuat...",

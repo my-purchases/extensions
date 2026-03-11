@@ -9,14 +9,13 @@ import { StatusBadge } from './components/StatusBadge';
 import { LanguageSelector } from './components/LanguageSelector';
 import { ShoppingBag, RefreshCw, Trash2, ExternalLink, Play, Square, Loader2 } from 'lucide-react';
 
-type ProviderTab = 'all' | 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz';
+type ProviderTab = 'all' | 'aliexpress' | 'temu' | 'allegro';
 
 const PROVIDER_TAB_KEYS: Record<ProviderTab, string> = {
   all: 'tabs.all',
   aliexpress: 'tabs.aliexpress',
   temu: 'tabs.temu',
-  'allegro-pl': 'tabs.allegroPl',
-  'allegro-cz': 'tabs.allegroCz',
+  allegro: 'tabs.allegro',
 };
 
 function sendMessage(message: RuntimeMessage): Promise<RuntimeResponse> {
@@ -43,7 +42,9 @@ export default function App() {
     setLoading(true);
     try {
       const appliedFilters: OrderFilters = { ...filters };
-      if (providerTab !== 'all') {
+      if (providerTab === 'allegro') {
+        appliedFilters.providerId = ['allegro-pl', 'allegro-cz'];
+      } else if (providerTab !== 'all') {
         appliedFilters.providerId = providerTab;
       }
       const res = await sendMessage({ type: 'GET_ORDERS', filters: appliedFilters });
@@ -158,10 +159,8 @@ export default function App() {
   const handleOpenOrders = () => {
     if (providerTab === 'temu') {
       chrome.tabs.create({ url: 'https://www.temu.com/bgt_orders.html' });
-    } else if (providerTab === 'allegro-pl') {
+    } else if (providerTab === 'allegro') {
       chrome.tabs.create({ url: 'https://allegro.pl/moje-allegro/zakupy/kupione' });
-    } else if (providerTab === 'allegro-cz') {
-      chrome.tabs.create({ url: 'https://allegro.cz/moje-allegro/nakupy/historie-nakupu' });
     } else {
       chrome.tabs.create({ url: 'https://www.aliexpress.com/p/order/index.html' });
     }
@@ -195,8 +194,7 @@ export default function App() {
   const getEmptyInstructions = (): string => {
     switch (providerTab) {
       case 'temu': return t('empty.instructionsTemu');
-      case 'allegro-pl': return t('empty.instructionsAllegroPl');
-      case 'allegro-cz': return t('empty.instructionsAllegroCz');
+      case 'allegro': return t('empty.instructionsAllegro');
       case 'aliexpress': return t('empty.instructionsAliexpress');
       default: return t('empty.instructionsAll');
     }
@@ -205,8 +203,7 @@ export default function App() {
   const getGoToLabel = (): string => {
     switch (providerTab) {
       case 'temu': return t('empty.goToTemu');
-      case 'allegro-pl': return t('empty.goToAllegroPl');
-      case 'allegro-cz': return t('empty.goToAllegroCz');
+      case 'allegro': return t('empty.goToAllegro');
       default: return t('empty.goToAliexpress');
     }
   };
@@ -227,7 +224,7 @@ export default function App() {
 
       {/* Provider tabs */}
       <div className="flex bg-white border-b border-gray-200">
-        {(['all', 'aliexpress', 'temu', 'allegro-pl', 'allegro-cz'] as ProviderTab[]).map((tab) => (
+        {(['all', 'aliexpress', 'temu', 'allegro'] as ProviderTab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setProviderTab(tab)}

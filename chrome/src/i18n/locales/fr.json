@@ -6,8 +6,7 @@
     "all": "Tout",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegroPl": "Allegro PL",
-    "allegroCz": "Allegro CZ"
+    "allegro": "Allegro"
   },
   "actions": {
     "openOrders": "Ouvrir les Commandes",
@@ -28,13 +27,11 @@
   "empty": {
     "noOrders": "Aucune commande collectée pour le moment",
     "instructionsTemu": "Ouvrez votre page de commandes Temu et parcourez-les. Les commandes seront capturées automatiquement.",
-    "instructionsAllegroPl": "Ouvrez votre page de commandes Allegro.pl et parcourez-les. Les commandes seront capturées automatiquement.",
-    "instructionsAllegroCz": "Ouvrez votre page de commandes Allegro.cz et parcourez-les. Les commandes seront capturées automatiquement.",
+    "instructionsAllegro": "Ouvrez votre page de commandes Allegro (allegro.pl ou allegro.cz) et parcourez-les. Les commandes seront capturées automatiquement.",
     "instructionsAliexpress": "Ouvrez votre page de commandes AliExpress et parcourez-les. Les commandes seront capturées automatiquement.",
     "instructionsAll": "Ouvrez votre page de commandes AliExpress, Temu ou Allegro et parcourez-les. Les commandes seront capturées automatiquement.",
     "goToTemu": "Aller aux Commandes Temu",
-    "goToAllegroPl": "Aller aux Commandes Allegro.pl",
-    "goToAllegroCz": "Aller aux Commandes Allegro.cz",
+    "goToAllegro": "Aller aux Commandes Allegro",
     "goToAliexpress": "Aller aux Commandes AliExpress"
   },
   "loading": "Chargement...",

@@ -6,8 +6,7 @@
     "all": "全部",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegroPl": "Allegro PL",
-    "allegroCz": "Allegro CZ"
+    "allegro": "Allegro"
   },
   "actions": {
     "openOrders": "打开订单",
@@ -28,13 +27,11 @@
   "empty": {
     "noOrders": "尚未收集任何订单",
     "instructionsTemu": "打开您的Temu订单页面并浏览。订单将被自动捕获。",
-    "instructionsAllegroPl": "打开您的Allegro.pl订单页面并浏览。订单将被自动捕获。",
-    "instructionsAllegroCz": "打开您的Allegro.cz订单页面并浏览。订单将被自动捕获。",
+    "instructionsAllegro": "打开您的Allegro订单页面（allegro.pl或allegro.cz）并浏览。订单将被自动捕获。",
     "instructionsAliexpress": "打开您的AliExpress订单页面并浏览。订单将被自动捕获。",
     "instructionsAll": "打开您的AliExpress、Temu或Allegro订单页面并浏览。订单将被自动捕获。",
     "goToTemu": "前往Temu订单",
-    "goToAllegroPl": "前往Allegro.pl订单",
-    "goToAllegroCz": "前往Allegro.cz订单",
+    "goToAllegro": "前往Allegro订单",
     "goToAliexpress": "前往AliExpress订单"
   },
   "loading": "加载中...",

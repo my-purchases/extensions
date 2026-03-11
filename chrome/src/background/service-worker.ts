@@ -124,7 +124,11 @@ async function handleMessage(
         const { search, status, dateFrom, dateTo, providerId } = message.filters;
 
         if (providerId) {
-          orders = orders.filter((o) => (o.providerId || 'aliexpress') === providerId);
+          if (Array.isArray(providerId)) {
+            orders = orders.filter((o) => providerId.includes(o.providerId || 'aliexpress'));
+          } else {
+            orders = orders.filter((o) => (o.providerId || 'aliexpress') === providerId);
+          }
         }
         if (search) {
           const q = search.toLowerCase();
