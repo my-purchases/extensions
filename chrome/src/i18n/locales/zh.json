@@ -1,0 +1,79 @@
+{
+  "header": {
+    "title": "我的购物收集器"
+  },
+  "tabs": {
+    "all": "全部",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegro": "Allegro"
+  },
+  "actions": {
+    "openOrders": "打开订单",
+    "stop": "停止",
+    "collectAll": "收集全部",
+    "collectAllTitle": "自动滚动浏览所有订单页面以收集全部内容",
+    "export": "导出 ({{count}})",
+    "refresh": "刷新"
+  },
+  "autoCollect": {
+    "collecting": "收集中... 第{{page}}页",
+    "orders": "({{count}}个订单)"
+  },
+  "dialogs": {
+    "deleteConfirm": "删除所有已收集的订单？此操作无法撤销。",
+    "copiedToClipboard": "已复制到剪贴板！您可以粘贴到Google表格中。"
+  },
+  "empty": {
+    "noOrders": "尚未收集任何订单",
+    "instructionsTemu": "打开您的Temu订单页面并浏览。订单将被自动捕获。",
+    "instructionsAllegro": "打开您的Allegro订单页面（allegro.pl或allegro.cz）并浏览。订单将被自动捕获。",
+    "instructionsAliexpress": "打开您的AliExpress订单页面并浏览。订单将被自动捕获。",
+    "instructionsAll": "打开您的AliExpress、Temu或Allegro订单页面并浏览。订单将被自动捕获。",
+    "goToTemu": "前往Temu订单",
+    "goToAllegro": "前往Allegro订单",
+    "goToAliexpress": "前往AliExpress订单"
+  },
+  "loading": "加载中...",
+  "footer": "我的购物收集器 v{{version}}",
+  "filter": {
+    "searchPlaceholder": "搜索订单...",
+    "clearFilters": "清除筛选",
+    "all": "全部",
+    "awaitingDelivery": "等待发货",
+    "completed": "已完成",
+    "inTransit": "运输中",
+    "processing": "处理中",
+    "expired": "已过期"
+  },
+  "exportPanel": {
+    "title": "导出{{count}}个订单为：",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "剪贴板",
+    "csvDesc": "电子表格格式",
+    "jsonDesc": "用于My Purchases网页应用",
+    "htmlDesc": "样式化表格视图",
+    "clipboardDesc": "粘贴到Google表格"
+  },
+  "statusBadge": {
+    "orders": "{{count}}个订单",
+    "active": "活跃",
+    "idle": "空闲",
+    "activeTitle": "正在监听订单数据",
+    "idleTitle": "打开订单页面开始收集"
+  },
+  "orderStatus": {
+    "completed": "已完成",
+    "awaitingDelivery": "等待发货",
+    "inTransit": "运输中",
+    "processing": "处理中",
+    "expired": "已过期",
+    "cancelled": "已取消",
+    "unknown": "未知"
+  },
+  "language": {
+    "label": "语言"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "header": {
+    "title": "Colector de Compras"
+  },
+  "tabs": {
+    "all": "Todo",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegro": "Allegro"
+  },
+  "actions": {
+    "openOrders": "Abrir Pedidos",
+    "stop": "Detener",
+    "collectAll": "Recopilar Todo",
+    "collectAllTitle": "Desplazarse automáticamente por todas las páginas de pedidos para recopilar todo",
+    "export": "Exportar ({{count}})",
+    "refresh": "Actualizar"
+  },
+  "autoCollect": {
+    "collecting": "Recopilando... página {{page}}",
+    "orders": "({{count}} pedidos)"
+  },
+  "dialogs": {
+    "deleteConfirm": "¿Eliminar todos los pedidos recopilados? Esta acción no se puede deshacer.",
+    "copiedToClipboard": "¡Copiado al portapapeles! Puedes pegarlo en Google Sheets."
+  },
+  "empty": {
+    "noOrders": "Aún no se han recopilado pedidos",
+    "instructionsTemu": "Abre tu página de pedidos de Temu y navega por ellos. Los pedidos se capturarán automáticamente.",
+    "instructionsAllegro": "Abre tu página de pedidos de Allegro (allegro.pl o allegro.cz) y navega por ellos. Los pedidos se capturarán automáticamente.",
+    "instructionsAliexpress": "Abre tu página de pedidos de AliExpress y navega por ellos. Los pedidos se capturarán automáticamente.",
+    "instructionsAll": "Abre tu página de pedidos de AliExpress, Temu o Allegro y navega por ellos. Los pedidos se capturarán automáticamente.",
+    "goToTemu": "Ir a Pedidos de Temu",
+    "goToAllegro": "Ir a Pedidos de Allegro",
+    "goToAliexpress": "Ir a Pedidos de AliExpress"
+  },
+  "loading": "Cargando...",
+  "footer": "Colector de Compras v{{version}}",
+  "filter": {
+    "searchPlaceholder": "Buscar pedidos...",
+    "clearFilters": "Limpiar filtros",
+    "all": "Todo",
+    "awaitingDelivery": "Pendiente de entrega",
+    "completed": "Completado",
+    "inTransit": "En tránsito",
+    "processing": "Procesando",
+    "expired": "Expirado"
+  },
+  "exportPanel": {
+    "title": "Exportar {{count}} pedido(s) como:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "Portapapeles",
+    "csvDesc": "Formato de hoja de cálculo",
+    "jsonDesc": "Para la app web My Purchases",
+    "htmlDesc": "Vista de tabla con estilo",
+    "clipboardDesc": "Pegar en Google Sheets"
+  },
+  "statusBadge": {
+    "orders": "{{count}} pedidos",
+    "active": "Activo",
+    "idle": "Inactivo",
+    "activeTitle": "Escuchando datos de pedidos",
+    "idleTitle": "Abre la página de pedidos para empezar a recopilar"
+  },
+  "orderStatus": {
+    "completed": "Completado",
+    "awaitingDelivery": "Pendiente de entrega",
+    "inTransit": "En tránsito",
+    "processing": "Procesando",
+    "expired": "Expirado",
+    "cancelled": "Cancelado",
+    "unknown": "Desconocido"
+  },
+  "language": {
+    "label": "Idioma"
+  }
+}

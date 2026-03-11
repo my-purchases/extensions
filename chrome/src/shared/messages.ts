@@ -51,7 +51,7 @@ export interface OrderFilters {
   status?: string;
   dateFrom?: string;
   dateTo?: string;
-  providerId?: string;
+  providerId?: string | string[];
 }
 
 /** Auto-collect state */

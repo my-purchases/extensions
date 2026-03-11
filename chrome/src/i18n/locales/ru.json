@@ -1,0 +1,79 @@
+{
+  "header": {
+    "title": "Сборщик Покупок"
+  },
+  "tabs": {
+    "all": "Все",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegro": "Allegro"
+  },
+  "actions": {
+    "openOrders": "Открыть Заказы",
+    "stop": "Стоп",
+    "collectAll": "Собрать Все",
+    "collectAllTitle": "Автоматическая прокрутка всех страниц заказов для сбора всех данных",
+    "export": "Экспорт ({{count}})",
+    "refresh": "Обновить"
+  },
+  "autoCollect": {
+    "collecting": "Сбор... страница {{page}}",
+    "orders": "({{count}} заказов)"
+  },
+  "dialogs": {
+    "deleteConfirm": "Удалить все собранные заказы? Это действие нельзя отменить.",
+    "copiedToClipboard": "Скопировано в буфер обмена! Вы можете вставить это в Google Sheets."
+  },
+  "empty": {
+    "noOrders": "Заказы ещё не собраны",
+    "instructionsTemu": "Откройте страницу заказов Temu и просмотрите их. Заказы будут собраны автоматически.",
+    "instructionsAllegro": "Откройте страницу заказов Allegro (allegro.pl или allegro.cz) и просмотрите их. Заказы будут собраны автоматически.",
+    "instructionsAliexpress": "Откройте страницу заказов AliExpress и просмотрите их. Заказы будут собраны автоматически.",
+    "instructionsAll": "Откройте страницу заказов AliExpress, Temu или Allegro и просмотрите их. Заказы будут собраны автоматически.",
+    "goToTemu": "Перейти к заказам Temu",
+    "goToAllegro": "Перейти к заказам Allegro",
+    "goToAliexpress": "Перейти к заказам AliExpress"
+  },
+  "loading": "Загрузка...",
+  "footer": "Сборщик Покупок v{{version}}",
+  "filter": {
+    "searchPlaceholder": "Поиск заказов...",
+    "clearFilters": "Очистить фильтры",
+    "all": "Все",
+    "awaitingDelivery": "Ожидает доставки",
+    "completed": "Завершён",
+    "inTransit": "В пути",
+    "processing": "Обработка",
+    "expired": "Истёк"
+  },
+  "exportPanel": {
+    "title": "Экспортировать {{count}} заказ(ов) как:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "Буфер обмена",
+    "csvDesc": "Формат таблицы",
+    "jsonDesc": "Для веб-приложения My Purchases",
+    "htmlDesc": "Стилизованная таблица",
+    "clipboardDesc": "Вставить в Google Sheets"
+  },
+  "statusBadge": {
+    "orders": "{{count}} заказов",
+    "active": "Активен",
+    "idle": "Неактивен",
+    "activeTitle": "Отслеживание данных заказов",
+    "idleTitle": "Откройте страницу заказов для начала сбора"
+  },
+  "orderStatus": {
+    "completed": "Завершён",
+    "awaitingDelivery": "Ожидает доставки",
+    "inTransit": "В пути",
+    "processing": "Обработка",
+    "expired": "Истёк",
+    "cancelled": "Отменён",
+    "unknown": "Неизвестно"
+  },
+  "language": {
+    "label": "Язык"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "header": {
+    "title": "Satın Alma Toplayıcı"
+  },
+  "tabs": {
+    "all": "Tümü",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegro": "Allegro"
+  },
+  "actions": {
+    "openOrders": "Siparişleri Aç",
+    "stop": "Durdur",
+    "collectAll": "Tümünü Topla",
+    "collectAllTitle": "Tüm sipariş sayfalarını otomatik olarak kaydırarak her şeyi topla",
+    "export": "Dışa Aktar ({{count}})",
+    "refresh": "Yenile"
+  },
+  "autoCollect": {
+    "collecting": "Toplanıyor... sayfa {{page}}",
+    "orders": "({{count}} sipariş)"
+  },
+  "dialogs": {
+    "deleteConfirm": "Toplanan tüm siparişler silinsin mi? Bu işlem geri alınamaz.",
+    "copiedToClipboard": "Panoya kopyalandı! Google Sheets'e yapıştırabilirsiniz."
+  },
+  "empty": {
+    "noOrders": "Henüz sipariş toplanmadı",
+    "instructionsTemu": "Temu sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
+    "instructionsAllegro": "Allegro sipariş sayfanızı (allegro.pl veya allegro.cz) açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
+    "instructionsAliexpress": "AliExpress sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
+    "instructionsAll": "AliExpress, Temu veya Allegro sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
+    "goToTemu": "Temu Siparişlerine Git",
+    "goToAllegro": "Allegro Siparişlerine Git",
+    "goToAliexpress": "AliExpress Siparişlerine Git"
+  },
+  "loading": "Yükleniyor...",
+  "footer": "Satın Alma Toplayıcı v{{version}}",
+  "filter": {
+    "searchPlaceholder": "Sipariş ara...",
+    "clearFilters": "Filtreleri temizle",
+    "all": "Tümü",
+    "awaitingDelivery": "Teslimat bekleniyor",
+    "completed": "Tamamlandı",
+    "inTransit": "Yolda",
+    "processing": "İşleniyor",
+    "expired": "Süresi doldu"
+  },
+  "exportPanel": {
+    "title": "{{count}} sipariş(i) olarak dışa aktar:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "Pano",
+    "csvDesc": "Tablo formatı",
+    "jsonDesc": "My Purchases web uygulaması için",
+    "htmlDesc": "Stilize tablo görünümü",
+    "clipboardDesc": "Google Sheets'e yapıştır"
+  },
+  "statusBadge": {
+    "orders": "{{count}} sipariş",
+    "active": "Aktif",
+    "idle": "Beklemede",
+    "activeTitle": "Sipariş verileri dinleniyor",
+    "idleTitle": "Toplamaya başlamak için sipariş sayfasını açın"
+  },
+  "orderStatus": {
+    "completed": "Tamamlandı",
+    "awaitingDelivery": "Teslimat bekleniyor",
+    "inTransit": "Yolda",
+    "processing": "İşleniyor",
+    "expired": "Süresi doldu",
+    "cancelled": "İptal edildi",
+    "unknown": "Bilinmiyor"
+  },
+  "language": {
+    "label": "Dil"
+  }
+}

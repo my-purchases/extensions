@@ -1,0 +1,79 @@
+{
+  "header": {
+    "title": "구매 수집기"
+  },
+  "tabs": {
+    "all": "전체",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegro": "Allegro"
+  },
+  "actions": {
+    "openOrders": "주문 열기",
+    "stop": "중지",
+    "collectAll": "전체 수집",
+    "collectAllTitle": "모든 주문 페이지를 자동으로 스크롤하여 전체 수집",
+    "export": "내보내기 ({{count}})",
+    "refresh": "새로고침"
+  },
+  "autoCollect": {
+    "collecting": "수집 중... {{page}}페이지",
+    "orders": "({{count}}개 주문)"
+  },
+  "dialogs": {
+    "deleteConfirm": "수집된 모든 주문을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+    "copiedToClipboard": "클립보드에 복사되었습니다! Google Sheets에 붙여넣을 수 있습니다."
+  },
+  "empty": {
+    "noOrders": "아직 수집된 주문이 없습니다",
+    "instructionsTemu": "Temu 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
+    "instructionsAllegro": "Allegro 주문 페이지(allegro.pl 또는 allegro.cz)를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
+    "instructionsAliexpress": "AliExpress 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
+    "instructionsAll": "AliExpress, Temu 또는 Allegro 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
+    "goToTemu": "Temu 주문으로 이동",
+    "goToAllegro": "Allegro 주문으로 이동",
+    "goToAliexpress": "AliExpress 주문으로 이동"
+  },
+  "loading": "로딩 중...",
+  "footer": "구매 수집기 v{{version}}",
+  "filter": {
+    "searchPlaceholder": "주문 검색...",
+    "clearFilters": "필터 지우기",
+    "all": "전체",
+    "awaitingDelivery": "배송 대기",
+    "completed": "완료",
+    "inTransit": "배송 중",
+    "processing": "처리 중",
+    "expired": "만료됨"
+  },
+  "exportPanel": {
+    "title": "{{count}}개 주문 내보내기:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "클립보드",
+    "csvDesc": "스프레드시트 형식",
+    "jsonDesc": "My Purchases 웹 앱용",
+    "htmlDesc": "스타일 테이블 보기",
+    "clipboardDesc": "Google Sheets에 붙여넣기"
+  },
+  "statusBadge": {
+    "orders": "{{count}}개 주문",
+    "active": "활성",
+    "idle": "대기",
+    "activeTitle": "주문 데이터 수신 중",
+    "idleTitle": "주문 페이지를 열어 수집을 시작하세요"
+  },
+  "orderStatus": {
+    "completed": "완료",
+    "awaitingDelivery": "배송 대기",
+    "inTransit": "배송 중",
+    "processing": "처리 중",
+    "expired": "만료됨",
+    "cancelled": "취소됨",
+    "unknown": "알 수 없음"
+  },
+  "language": {
+    "label": "언어"
+  }
+}
