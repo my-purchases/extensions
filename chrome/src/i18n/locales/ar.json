@@ -1,0 +1,82 @@
+{
+  "header": {
+    "title": "جامع مشترياتي"
+  },
+  "tabs": {
+    "all": "الكل",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegroPl": "Allegro PL",
+    "allegroCz": "Allegro CZ"
+  },
+  "actions": {
+    "openOrders": "فتح الطلبات",
+    "stop": "إيقاف",
+    "collectAll": "جمع الكل",
+    "collectAllTitle": "التمرير التلقائي عبر جميع صفحات الطلبات لجمع كل شيء",
+    "export": "تصدير ({{count}})",
+    "refresh": "تحديث"
+  },
+  "autoCollect": {
+    "collecting": "جاري الجمع... صفحة {{page}}",
+    "orders": "({{count}} طلبات)"
+  },
+  "dialogs": {
+    "deleteConfirm": "حذف جميع الطلبات المجمعة؟ لا يمكن التراجع عن هذا.",
+    "copiedToClipboard": "تم النسخ إلى الحافظة! يمكنك لصقه في Google Sheets."
+  },
+  "empty": {
+    "noOrders": "لم يتم جمع أي طلبات بعد",
+    "instructionsTemu": "افتح صفحة طلبات Temu وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "instructionsAllegroPl": "افتح صفحة طلبات Allegro.pl وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "instructionsAllegroCz": "افتح صفحة طلبات Allegro.cz وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "instructionsAliexpress": "افتح صفحة طلبات AliExpress وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "instructionsAll": "افتح صفحة طلبات AliExpress أو Temu أو Allegro وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "goToTemu": "الذهاب إلى طلبات Temu",
+    "goToAllegroPl": "الذهاب إلى طلبات Allegro.pl",
+    "goToAllegroCz": "الذهاب إلى طلبات Allegro.cz",
+    "goToAliexpress": "الذهاب إلى طلبات AliExpress"
+  },
+  "loading": "جاري التحميل...",
+  "footer": "جامع مشترياتي v{{version}}",
+  "filter": {
+    "searchPlaceholder": "البحث في الطلبات...",
+    "clearFilters": "مسح الفلاتر",
+    "all": "الكل",
+    "awaitingDelivery": "بانتظار التوصيل",
+    "completed": "مكتمل",
+    "inTransit": "قيد الشحن",
+    "processing": "قيد المعالجة",
+    "expired": "منتهي الصلاحية"
+  },
+  "exportPanel": {
+    "title": "تصدير {{count}} طلب(ات) كـ:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "الحافظة",
+    "csvDesc": "تنسيق جدول بيانات",
+    "jsonDesc": "لتطبيق My Purchases",
+    "htmlDesc": "عرض جدول منسق",
+    "clipboardDesc": "لصق في Google Sheets"
+  },
+  "statusBadge": {
+    "orders": "{{count}} طلبات",
+    "active": "نشط",
+    "idle": "خامل",
+    "activeTitle": "يستمع لبيانات الطلبات",
+    "idleTitle": "افتح صفحة الطلبات لبدء الجمع"
+  },
+  "orderStatus": {
+    "completed": "مكتمل",
+    "awaitingDelivery": "بانتظار التوصيل",
+    "inTransit": "قيد الشحن",
+    "processing": "قيد المعالجة",
+    "expired": "منتهي الصلاحية",
+    "cancelled": "ملغي",
+    "unknown": "غير معروف"
+  },
+  "language": {
+    "label": "اللغة"
+  }
+}

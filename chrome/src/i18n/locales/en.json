@@ -1,0 +1,82 @@
+{
+  "header": {
+    "title": "My Purchases Collector"
+  },
+  "tabs": {
+    "all": "All",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegroPl": "Allegro PL",
+    "allegroCz": "Allegro CZ"
+  },
+  "actions": {
+    "openOrders": "Open Orders",
+    "stop": "Stop",
+    "collectAll": "Collect All",
+    "collectAllTitle": "Auto-scroll through all order pages to collect everything",
+    "export": "Export ({{count}})",
+    "refresh": "Refresh"
+  },
+  "autoCollect": {
+    "collecting": "Collecting... page {{page}}",
+    "orders": "({{count}} orders)"
+  },
+  "dialogs": {
+    "deleteConfirm": "Delete all collected orders? This cannot be undone.",
+    "copiedToClipboard": "Copied to clipboard! You can paste it into Google Sheets."
+  },
+  "empty": {
+    "noOrders": "No orders collected yet",
+    "instructionsTemu": "Open your Temu orders page and browse through them. Orders will be captured automatically.",
+    "instructionsAllegroPl": "Open your Allegro.pl orders page and browse through them. Orders will be captured automatically.",
+    "instructionsAllegroCz": "Open your Allegro.cz orders page and browse through them. Orders will be captured automatically.",
+    "instructionsAliexpress": "Open your AliExpress orders page and browse through them. Orders will be captured automatically.",
+    "instructionsAll": "Open your AliExpress, Temu, or Allegro orders page and browse through them. Orders will be captured automatically.",
+    "goToTemu": "Go to Temu Orders",
+    "goToAllegroPl": "Go to Allegro.pl Orders",
+    "goToAllegroCz": "Go to Allegro.cz Orders",
+    "goToAliexpress": "Go to AliExpress Orders"
+  },
+  "loading": "Loading...",
+  "footer": "My Purchases Collector v{{version}}",
+  "filter": {
+    "searchPlaceholder": "Search orders...",
+    "clearFilters": "Clear filters",
+    "all": "All",
+    "awaitingDelivery": "Awaiting delivery",
+    "completed": "Completed",
+    "inTransit": "In Transit",
+    "processing": "Processing",
+    "expired": "Expired"
+  },
+  "exportPanel": {
+    "title": "Export {{count}} order(s) as:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "Clipboard",
+    "csvDesc": "Spreadsheet format",
+    "jsonDesc": "For My Purchases web app",
+    "htmlDesc": "Styled table view",
+    "clipboardDesc": "Paste to Google Sheets"
+  },
+  "statusBadge": {
+    "orders": "{{count}} orders",
+    "active": "Active",
+    "idle": "Idle",
+    "activeTitle": "Listening for order data",
+    "idleTitle": "Open orders page to start collecting"
+  },
+  "orderStatus": {
+    "completed": "Completed",
+    "awaitingDelivery": "Awaiting delivery",
+    "inTransit": "In Transit",
+    "processing": "Processing",
+    "expired": "Expired",
+    "cancelled": "Cancelled",
+    "unknown": "Unknown"
+  },
+  "language": {
+    "label": "Language"
+  }
+}

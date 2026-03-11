@@ -1,0 +1,82 @@
+{
+  "header": {
+    "title": "Collecteur d'Achats"
+  },
+  "tabs": {
+    "all": "Tout",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegroPl": "Allegro PL",
+    "allegroCz": "Allegro CZ"
+  },
+  "actions": {
+    "openOrders": "Ouvrir les Commandes",
+    "stop": "Arrêter",
+    "collectAll": "Tout Collecter",
+    "collectAllTitle": "Faire défiler automatiquement toutes les pages de commandes pour tout collecter",
+    "export": "Exporter ({{count}})",
+    "refresh": "Actualiser"
+  },
+  "autoCollect": {
+    "collecting": "Collecte en cours... page {{page}}",
+    "orders": "({{count}} commandes)"
+  },
+  "dialogs": {
+    "deleteConfirm": "Supprimer toutes les commandes collectées ? Cette action est irréversible.",
+    "copiedToClipboard": "Copié dans le presse-papiers ! Vous pouvez le coller dans Google Sheets."
+  },
+  "empty": {
+    "noOrders": "Aucune commande collectée pour le moment",
+    "instructionsTemu": "Ouvrez votre page de commandes Temu et parcourez-les. Les commandes seront capturées automatiquement.",
+    "instructionsAllegroPl": "Ouvrez votre page de commandes Allegro.pl et parcourez-les. Les commandes seront capturées automatiquement.",
+    "instructionsAllegroCz": "Ouvrez votre page de commandes Allegro.cz et parcourez-les. Les commandes seront capturées automatiquement.",
+    "instructionsAliexpress": "Ouvrez votre page de commandes AliExpress et parcourez-les. Les commandes seront capturées automatiquement.",
+    "instructionsAll": "Ouvrez votre page de commandes AliExpress, Temu ou Allegro et parcourez-les. Les commandes seront capturées automatiquement.",
+    "goToTemu": "Aller aux Commandes Temu",
+    "goToAllegroPl": "Aller aux Commandes Allegro.pl",
+    "goToAllegroCz": "Aller aux Commandes Allegro.cz",
+    "goToAliexpress": "Aller aux Commandes AliExpress"
+  },
+  "loading": "Chargement...",
+  "footer": "Collecteur d'Achats v{{version}}",
+  "filter": {
+    "searchPlaceholder": "Rechercher des commandes...",
+    "clearFilters": "Effacer les filtres",
+    "all": "Tout",
+    "awaitingDelivery": "En attente de livraison",
+    "completed": "Terminé",
+    "inTransit": "En transit",
+    "processing": "En cours",
+    "expired": "Expiré"
+  },
+  "exportPanel": {
+    "title": "Exporter {{count}} commande(s) en :",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "Presse-papiers",
+    "csvDesc": "Format tableur",
+    "jsonDesc": "Pour l'app web My Purchases",
+    "htmlDesc": "Vue tableau stylisé",
+    "clipboardDesc": "Coller dans Google Sheets"
+  },
+  "statusBadge": {
+    "orders": "{{count}} commandes",
+    "active": "Actif",
+    "idle": "Inactif",
+    "activeTitle": "Écoute des données de commandes",
+    "idleTitle": "Ouvrez la page des commandes pour commencer la collecte"
+  },
+  "orderStatus": {
+    "completed": "Terminé",
+    "awaitingDelivery": "En attente de livraison",
+    "inTransit": "En transit",
+    "processing": "En cours",
+    "expired": "Expiré",
+    "cancelled": "Annulé",
+    "unknown": "Inconnu"
+  },
+  "language": {
+    "label": "Langue"
+  }
+}

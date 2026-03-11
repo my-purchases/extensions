@@ -1,0 +1,82 @@
+{
+  "header": {
+    "title": "मेरी खरीदारी कलेक्टर"
+  },
+  "tabs": {
+    "all": "सभी",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegroPl": "Allegro PL",
+    "allegroCz": "Allegro CZ"
+  },
+  "actions": {
+    "openOrders": "ऑर्डर खोलें",
+    "stop": "रोकें",
+    "collectAll": "सभी एकत्र करें",
+    "collectAllTitle": "सब कुछ एकत्र करने के लिए सभी ऑर्डर पेजों को स्वचालित रूप से स्क्रॉल करें",
+    "export": "निर्यात ({{count}})",
+    "refresh": "रीफ्रेश"
+  },
+  "autoCollect": {
+    "collecting": "एकत्र किया जा रहा है... पृष्ठ {{page}}",
+    "orders": "({{count}} ऑर्डर)"
+  },
+  "dialogs": {
+    "deleteConfirm": "सभी एकत्रित ऑर्डर हटाएं? यह पूर्ववत नहीं किया जा सकता।",
+    "copiedToClipboard": "क्लिपबोर्ड पर कॉपी किया गया! आप इसे Google Sheets में पेस्ट कर सकते हैं।"
+  },
+  "empty": {
+    "noOrders": "अभी तक कोई ऑर्डर एकत्र नहीं किया गया",
+    "instructionsTemu": "अपना Temu ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
+    "instructionsAllegroPl": "अपना Allegro.pl ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
+    "instructionsAllegroCz": "अपना Allegro.cz ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
+    "instructionsAliexpress": "अपना AliExpress ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
+    "instructionsAll": "अपना AliExpress, Temu या Allegro ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
+    "goToTemu": "Temu ऑर्डर पर जाएं",
+    "goToAllegroPl": "Allegro.pl ऑर्डर पर जाएं",
+    "goToAllegroCz": "Allegro.cz ऑर्डर पर जाएं",
+    "goToAliexpress": "AliExpress ऑर्डर पर जाएं"
+  },
+  "loading": "लोड हो रहा है...",
+  "footer": "मेरी खरीदारी कलेक्टर v{{version}}",
+  "filter": {
+    "searchPlaceholder": "ऑर्डर खोजें...",
+    "clearFilters": "फ़िल्टर साफ़ करें",
+    "all": "सभी",
+    "awaitingDelivery": "डिलीवरी की प्रतीक्षा",
+    "completed": "पूर्ण",
+    "inTransit": "ट्रांजिट में",
+    "processing": "प्रोसेसिंग",
+    "expired": "समय सीमा समाप्त"
+  },
+  "exportPanel": {
+    "title": "{{count}} ऑर्डर निर्यात करें:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "क्लिपबोर्ड",
+    "csvDesc": "स्प्रेडशीट फ़ॉर्मेट",
+    "jsonDesc": "My Purchases वेब ऐप के लिए",
+    "htmlDesc": "स्टाइल टेबल व्यू",
+    "clipboardDesc": "Google Sheets में पेस्ट करें"
+  },
+  "statusBadge": {
+    "orders": "{{count}} ऑर्डर",
+    "active": "सक्रिय",
+    "idle": "निष्क्रिय",
+    "activeTitle": "ऑर्डर डेटा सुन रहा है",
+    "idleTitle": "एकत्र करना शुरू करने के लिए ऑर्डर पेज खोलें"
+  },
+  "orderStatus": {
+    "completed": "पूर्ण",
+    "awaitingDelivery": "डिलीवरी की प्रतीक्षा",
+    "inTransit": "ट्रांजिट में",
+    "processing": "प्रोसेसिंग",
+    "expired": "समय सीमा समाप्त",
+    "cancelled": "रद्द",
+    "unknown": "अज्ञात"
+  },
+  "language": {
+    "label": "भाषा"
+  }
+}

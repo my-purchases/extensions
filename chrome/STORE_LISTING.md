@@ -4,7 +4,7 @@
 My Purchases Collector
 
 ## Short Description (132 chars max)
-Automatically collect and export your AliExpress, Temu & Allegro orders to CSV, JSON, HTML, or clipboard. Privacy-first — data stays local.
+Collect & export AliExpress, Temu & Allegro orders to CSV/JSON/HTML. 15 languages, auto browser detection. Privacy-first — all local.
 
 ## Detailed Description
 
@@ -30,6 +30,24 @@ FEATURES
 • Filter orders by status (e.g. "Awaiting delivery")
 • Clean popup UI with order cards showing images, prices, and status
 
+15 LANGUAGES
+The interface automatically adapts to your browser language. You can also switch manually using the globe icon in the header. Supported languages:
+• English
+• 中文 (Chinese)
+• Español (Spanish)
+• हिन्दी (Hindi)
+• العربية (Arabic)
+• Português (Portuguese)
+• Français (French)
+• Русский (Russian)
+• 日本語 (Japanese)
+• Deutsch (German)
+• 한국어 (Korean)
+• Bahasa Indonesia (Indonesian)
+• Türkçe (Turkish)
+• Italiano (Italian)
+• Polski (Polish)
+
 PRIVACY
 • All data stored locally in your browser — nothing leaves your device
 • No analytics, no tracking, no telemetry
@@ -49,7 +67,10 @@ https://github.com/my-purchases/extensions/tree/master/chrome
 Shopping
 
 ## Language
-English
+All (auto-detected from browser settings)
+
+## Supported Languages
+English, Chinese (Simplified), Spanish, Hindi, Arabic, Portuguese, French, Russian, Japanese, German, Korean, Indonesian, Turkish, Italian, Polish
 
 ## Privacy Policy URL
 https://my-purchases.mobulum.com/privacy
@@ -64,3 +85,4 @@ Take screenshots at 1280x800 or 640x400:
 3. "Collect All" in progress on AliExpress, Temu, or Allegro order page
 4. Filter bar showing status and platform filters
 5. Empty state / first install view
+6. Language selector dropdown showing available languages

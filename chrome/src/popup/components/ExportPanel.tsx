@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { ExportFormat } from '@/shared/messages';
 import { FileText, FileJson, FileCode, ClipboardCopy } from 'lucide-react';
 
@@ -6,21 +7,23 @@ interface ExportPanelProps {
   orderCount: number;
 }
 
-const exportOptions: { format: ExportFormat; label: string; icon: typeof FileText; description: string }[] = [
-  { format: 'csv', label: 'CSV', icon: FileText, description: 'Spreadsheet format' },
-  { format: 'json', label: 'JSON', icon: FileJson, description: 'For My Purchases web app' },
-  { format: 'html', label: 'HTML', icon: FileCode, description: 'Styled table view' },
-  { format: 'clipboard', label: 'Clipboard', icon: ClipboardCopy, description: 'Paste to Google Sheets' },
+const EXPORT_OPTIONS: { format: ExportFormat; labelKey: string; icon: typeof FileText; descKey: string }[] = [
+  { format: 'csv', labelKey: 'exportPanel.csv', icon: FileText, descKey: 'exportPanel.csvDesc' },
+  { format: 'json', labelKey: 'exportPanel.json', icon: FileJson, descKey: 'exportPanel.jsonDesc' },
+  { format: 'html', labelKey: 'exportPanel.html', icon: FileCode, descKey: 'exportPanel.htmlDesc' },
+  { format: 'clipboard', labelKey: 'exportPanel.clipboard', icon: ClipboardCopy, descKey: 'exportPanel.clipboardDesc' },
 ];
 
 export function ExportPanel({ onExport, orderCount }: ExportPanelProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="px-4 py-3 bg-green-50 border-b border-green-100">
       <p className="text-xs text-green-700 mb-2 font-medium">
-        Export {orderCount} order{orderCount !== 1 ? 's' : ''} as:
+        {t('exportPanel.title', { count: orderCount })}
       </p>
       <div className="grid grid-cols-2 gap-2">
-        {exportOptions.map(({ format, label, icon: Icon, description }) => (
+        {EXPORT_OPTIONS.map(({ format, labelKey, icon: Icon, descKey }) => (
           <button
             key={format}
             onClick={() => onExport(format)}
@@ -28,8 +31,8 @@ export function ExportPanel({ onExport, orderCount }: ExportPanelProps) {
           >
             <Icon size={16} className="text-green-600 flex-shrink-0" />
             <div>
-              <div className="text-xs font-medium text-gray-800">{label}</div>
-              <div className="text-[10px] text-gray-400">{description}</div>
+              <div className="text-xs font-medium text-gray-800">{t(labelKey)}</div>
+              <div className="text-[10px] text-gray-400">{t(descKey)}</div>
             </div>
           </button>
         ))}

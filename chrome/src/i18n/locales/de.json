@@ -1,0 +1,82 @@
+{
+  "header": {
+    "title": "Einkaufs-Sammler"
+  },
+  "tabs": {
+    "all": "Alle",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegroPl": "Allegro PL",
+    "allegroCz": "Allegro CZ"
+  },
+  "actions": {
+    "openOrders": "Bestellungen öffnen",
+    "stop": "Stopp",
+    "collectAll": "Alle sammeln",
+    "collectAllTitle": "Automatisch durch alle Bestellseiten scrollen, um alles zu sammeln",
+    "export": "Exportieren ({{count}})",
+    "refresh": "Aktualisieren"
+  },
+  "autoCollect": {
+    "collecting": "Sammeln... Seite {{page}}",
+    "orders": "({{count}} Bestellungen)"
+  },
+  "dialogs": {
+    "deleteConfirm": "Alle gesammelten Bestellungen löschen? Dies kann nicht rückgängig gemacht werden.",
+    "copiedToClipboard": "In die Zwischenablage kopiert! Sie können es in Google Sheets einfügen."
+  },
+  "empty": {
+    "noOrders": "Noch keine Bestellungen gesammelt",
+    "instructionsTemu": "Öffnen Sie Ihre Temu-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
+    "instructionsAllegroPl": "Öffnen Sie Ihre Allegro.pl-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
+    "instructionsAllegroCz": "Öffnen Sie Ihre Allegro.cz-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
+    "instructionsAliexpress": "Öffnen Sie Ihre AliExpress-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
+    "instructionsAll": "Öffnen Sie Ihre AliExpress-, Temu- oder Allegro-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
+    "goToTemu": "Zu Temu-Bestellungen",
+    "goToAllegroPl": "Zu Allegro.pl-Bestellungen",
+    "goToAllegroCz": "Zu Allegro.cz-Bestellungen",
+    "goToAliexpress": "Zu AliExpress-Bestellungen"
+  },
+  "loading": "Laden...",
+  "footer": "Einkaufs-Sammler v{{version}}",
+  "filter": {
+    "searchPlaceholder": "Bestellungen suchen...",
+    "clearFilters": "Filter löschen",
+    "all": "Alle",
+    "awaitingDelivery": "Warte auf Lieferung",
+    "completed": "Abgeschlossen",
+    "inTransit": "Unterwegs",
+    "processing": "In Bearbeitung",
+    "expired": "Abgelaufen"
+  },
+  "exportPanel": {
+    "title": "{{count}} Bestellung(en) exportieren als:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "Zwischenablage",
+    "csvDesc": "Tabellenformat",
+    "jsonDesc": "Für die My Purchases Web-App",
+    "htmlDesc": "Stilisierte Tabellenansicht",
+    "clipboardDesc": "In Google Sheets einfügen"
+  },
+  "statusBadge": {
+    "orders": "{{count}} Bestellungen",
+    "active": "Aktiv",
+    "idle": "Inaktiv",
+    "activeTitle": "Lauscht auf Bestelldaten",
+    "idleTitle": "Bestellseite öffnen, um mit dem Sammeln zu beginnen"
+  },
+  "orderStatus": {
+    "completed": "Abgeschlossen",
+    "awaitingDelivery": "Warte auf Lieferung",
+    "inTransit": "Unterwegs",
+    "processing": "In Bearbeitung",
+    "expired": "Abgelaufen",
+    "cancelled": "Storniert",
+    "unknown": "Unbekannt"
+  },
+  "language": {
+    "label": "Sprache"
+  }
+}

@@ -1,9 +1,20 @@
+import { useTranslation } from 'react-i18next';
 import type { OrderItem } from '@/types/order';
 import { ExternalLink, Package } from 'lucide-react';
 
 interface OrderCardProps {
   order: OrderItem;
 }
+
+/** Map English status values from order data to translation keys */
+const STATUS_TRANSLATION_KEYS: Record<string, string> = {
+  'Completed': 'orderStatus.completed',
+  'Awaiting delivery': 'orderStatus.awaitingDelivery',
+  'In Transit': 'orderStatus.inTransit',
+  'Processing': 'orderStatus.processing',
+  'Expired': 'orderStatus.expired',
+  'Cancelled': 'orderStatus.cancelled',
+};
 
 export function OrderCard({ order }: OrderCardProps) {
   return (
@@ -79,6 +90,8 @@ export function OrderCard({ order }: OrderCardProps) {
 }
 
 function StatusPill({ status }: { status: string }) {
+  const { t } = useTranslation();
+
   const colors: Record<string, string> = {
     Completed: 'bg-green-100 text-green-700',
     'Awaiting delivery': 'bg-blue-100 text-blue-700',
@@ -89,10 +102,12 @@ function StatusPill({ status }: { status: string }) {
   };
 
   const colorClass = colors[status] ?? 'bg-gray-100 text-gray-500';
+  const translationKey = STATUS_TRANSLATION_KEYS[status];
+  const displayStatus = translationKey ? t(translationKey) : (status || t('orderStatus.unknown'));
 
   return (
     <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${colorClass}`}>
-      {status || 'Unknown'}
+      {displayStatus}
     </span>
   );
 }

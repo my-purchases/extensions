@@ -1,0 +1,82 @@
+{
+  "header": {
+    "title": "Raccoglitore Acquisti"
+  },
+  "tabs": {
+    "all": "Tutti",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegroPl": "Allegro PL",
+    "allegroCz": "Allegro CZ"
+  },
+  "actions": {
+    "openOrders": "Apri Ordini",
+    "stop": "Ferma",
+    "collectAll": "Raccogli Tutto",
+    "collectAllTitle": "Scorri automaticamente tutte le pagine degli ordini per raccogliere tutto",
+    "export": "Esporta ({{count}})",
+    "refresh": "Aggiorna"
+  },
+  "autoCollect": {
+    "collecting": "Raccolta in corso... pagina {{page}}",
+    "orders": "({{count}} ordini)"
+  },
+  "dialogs": {
+    "deleteConfirm": "Eliminare tutti gli ordini raccolti? Questa azione non può essere annullata.",
+    "copiedToClipboard": "Copiato negli appunti! Puoi incollarlo in Google Sheets."
+  },
+  "empty": {
+    "noOrders": "Nessun ordine raccolto ancora",
+    "instructionsTemu": "Apri la pagina degli ordini Temu e sfogliali. Gli ordini verranno acquisiti automaticamente.",
+    "instructionsAllegroPl": "Apri la pagina degli ordini Allegro.pl e sfogliali. Gli ordini verranno acquisiti automaticamente.",
+    "instructionsAllegroCz": "Apri la pagina degli ordini Allegro.cz e sfogliali. Gli ordini verranno acquisiti automaticamente.",
+    "instructionsAliexpress": "Apri la pagina degli ordini AliExpress e sfogliali. Gli ordini verranno acquisiti automaticamente.",
+    "instructionsAll": "Apri la pagina degli ordini AliExpress, Temu o Allegro e sfogliali. Gli ordini verranno acquisiti automaticamente.",
+    "goToTemu": "Vai agli Ordini Temu",
+    "goToAllegroPl": "Vai agli Ordini Allegro.pl",
+    "goToAllegroCz": "Vai agli Ordini Allegro.cz",
+    "goToAliexpress": "Vai agli Ordini AliExpress"
+  },
+  "loading": "Caricamento...",
+  "footer": "Raccoglitore Acquisti v{{version}}",
+  "filter": {
+    "searchPlaceholder": "Cerca ordini...",
+    "clearFilters": "Cancella filtri",
+    "all": "Tutti",
+    "awaitingDelivery": "In attesa di consegna",
+    "completed": "Completato",
+    "inTransit": "In transito",
+    "processing": "In elaborazione",
+    "expired": "Scaduto"
+  },
+  "exportPanel": {
+    "title": "Esporta {{count}} ordine/i come:",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "Appunti",
+    "csvDesc": "Formato foglio di calcolo",
+    "jsonDesc": "Per l'app web My Purchases",
+    "htmlDesc": "Vista tabella stilizzata",
+    "clipboardDesc": "Incolla in Google Sheets"
+  },
+  "statusBadge": {
+    "orders": "{{count}} ordini",
+    "active": "Attivo",
+    "idle": "Inattivo",
+    "activeTitle": "In ascolto per i dati degli ordini",
+    "idleTitle": "Apri la pagina degli ordini per iniziare a raccogliere"
+  },
+  "orderStatus": {
+    "completed": "Completato",
+    "awaitingDelivery": "In attesa di consegna",
+    "inTransit": "In transito",
+    "processing": "In elaborazione",
+    "expired": "Scaduto",
+    "cancelled": "Annullato",
+    "unknown": "Sconosciuto"
+  },
+  "language": {
+    "label": "Lingua"
+  }
+}

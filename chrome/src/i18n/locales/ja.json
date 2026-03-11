@@ -1,0 +1,82 @@
+{
+  "header": {
+    "title": "購入コレクター"
+  },
+  "tabs": {
+    "all": "すべて",
+    "aliexpress": "AliExpress",
+    "temu": "Temu",
+    "allegroPl": "Allegro PL",
+    "allegroCz": "Allegro CZ"
+  },
+  "actions": {
+    "openOrders": "注文を開く",
+    "stop": "停止",
+    "collectAll": "すべて収集",
+    "collectAllTitle": "すべての注文ページを自動スクロールしてすべてを収集",
+    "export": "エクスポート ({{count}})",
+    "refresh": "更新"
+  },
+  "autoCollect": {
+    "collecting": "収集中... {{page}}ページ",
+    "orders": "({{count}}件の注文)"
+  },
+  "dialogs": {
+    "deleteConfirm": "収集したすべての注文を削除しますか？この操作は元に戻せません。",
+    "copiedToClipboard": "クリップボードにコピーしました！Google Sheetsに貼り付けることができます。"
+  },
+  "empty": {
+    "noOrders": "まだ注文が収集されていません",
+    "instructionsTemu": "Temuの注文ページを開いて閲覧してください。注文は自動的にキャプチャされます。",
+    "instructionsAllegroPl": "Allegro.plの注文ページを開いて閲覧してください。注文は自動的にキャプチャされます。",
+    "instructionsAllegroCz": "Allegro.czの注文ページを開いて閲覧してください。注文は自動的にキャプチャされます。",
+    "instructionsAliexpress": "AliExpressの注文ページを開いて閲覧してください。注文は自動的にキャプチャされます。",
+    "instructionsAll": "AliExpress、Temu、またはAllegroの注文ページを開いて閲覧してください。注文は自動的にキャプチャされます。",
+    "goToTemu": "Temuの注文へ",
+    "goToAllegroPl": "Allegro.plの注文へ",
+    "goToAllegroCz": "Allegro.czの注文へ",
+    "goToAliexpress": "AliExpressの注文へ"
+  },
+  "loading": "読み込み中...",
+  "footer": "購入コレクター v{{version}}",
+  "filter": {
+    "searchPlaceholder": "注文を検索...",
+    "clearFilters": "フィルターをクリア",
+    "all": "すべて",
+    "awaitingDelivery": "配送待ち",
+    "completed": "完了",
+    "inTransit": "輸送中",
+    "processing": "処理中",
+    "expired": "期限切れ"
+  },
+  "exportPanel": {
+    "title": "{{count}}件の注文をエクスポート：",
+    "csv": "CSV",
+    "json": "JSON",
+    "html": "HTML",
+    "clipboard": "クリップボード",
+    "csvDesc": "スプレッドシート形式",
+    "jsonDesc": "My Purchasesウェブアプリ用",
+    "htmlDesc": "スタイル付きテーブル表示",
+    "clipboardDesc": "Google Sheetsに貼り付け"
+  },
+  "statusBadge": {
+    "orders": "{{count}}件の注文",
+    "active": "アクティブ",
+    "idle": "アイドル",
+    "activeTitle": "注文データを監視中",
+    "idleTitle": "注文ページを開いて収集を開始"
+  },
+  "orderStatus": {
+    "completed": "完了",
+    "awaitingDelivery": "配送待ち",
+    "inTransit": "輸送中",
+    "processing": "処理中",
+    "expired": "期限切れ",
+    "cancelled": "キャンセル済み",
+    "unknown": "不明"
+  },
+  "language": {
+    "label": "言語"
+  }
+}

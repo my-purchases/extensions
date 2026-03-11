@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { CollectionStatus } from '@/types/order';
 import { Wifi, WifiOff } from 'lucide-react';
 
@@ -7,11 +8,12 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, orderCount }: StatusBadgeProps) {
+  const { t } = useTranslation();
   const isActive = status?.isCollecting ?? false;
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-blue-100">{orderCount} orders</span>
+      <span className="text-xs text-blue-100">{t('statusBadge.orders', { count: orderCount })}</span>
       <div
         className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full ${
           isActive
@@ -20,12 +22,12 @@ export function StatusBadge({ status, orderCount }: StatusBadgeProps) {
         }`}
         title={
           isActive
-            ? 'Listening for order data on AliExpress'
-            : 'Open AliExpress orders page to start collecting'
+            ? t('statusBadge.activeTitle')
+            : t('statusBadge.idleTitle')
         }
       >
         {isActive ? <Wifi size={10} /> : <WifiOff size={10} />}
-        {isActive ? 'Active' : 'Idle'}
+        {isActive ? t('statusBadge.active') : t('statusBadge.idle')}
       </div>
     </div>
   );

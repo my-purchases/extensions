@@ -1,20 +1,22 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { OrderItem, CollectionStatus } from '@/types/order';
 import type { RuntimeMessage, RuntimeResponse, ExportFormat, OrderFilters, AutoCollectState } from '@/shared/messages';
 import { OrderList } from './components/OrderList';
 import { ExportPanel } from './components/ExportPanel';
 import { FilterBar } from './components/FilterBar';
 import { StatusBadge } from './components/StatusBadge';
+import { LanguageSelector } from './components/LanguageSelector';
 import { ShoppingBag, RefreshCw, Trash2, ExternalLink, Play, Square, Loader2 } from 'lucide-react';
 
 type ProviderTab = 'all' | 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz';
 
-const PROVIDER_LABELS: Record<ProviderTab, string> = {
-  all: 'All',
-  aliexpress: 'AliExpress',
-  temu: 'Temu',
-  'allegro-pl': 'Allegro PL',
-  'allegro-cz': 'Allegro CZ',
+const PROVIDER_TAB_KEYS: Record<ProviderTab, string> = {
+  all: 'tabs.all',
+  aliexpress: 'tabs.aliexpress',
+  temu: 'tabs.temu',
+  'allegro-pl': 'tabs.allegroPl',
+  'allegro-cz': 'tabs.allegroCz',
 };
 
 function sendMessage(message: RuntimeMessage): Promise<RuntimeResponse> {
@@ -22,6 +24,7 @@ function sendMessage(message: RuntimeMessage): Promise<RuntimeResponse> {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [status, setStatus] = useState<CollectionStatus | null>(null);
   const [filters, setFilters] = useState<OrderFilters>({});
@@ -114,7 +117,7 @@ export default function App() {
   }, [autoCollect.isRunning, loadAutoCollectStatus]);
 
   const handleClearAll = async () => {
-    if (!confirm('Delete all collected orders? This cannot be undone.')) return;
+    if (!confirm(t('dialogs.deleteConfirm'))) return;
     await sendMessage({ type: 'CLEAR_ORDERS' });
     setOrders([]);
   };
@@ -125,7 +128,7 @@ export default function App() {
 
     if (format === 'clipboard') {
       await navigator.clipboard.writeText(res.data);
-      alert('Copied to clipboard! You can paste it into Google Sheets.');
+      alert(t('dialogs.copiedToClipboard'));
       return;
     }
 
@@ -189,15 +192,37 @@ export default function App() {
     loadOrders();
   };
 
+  const getEmptyInstructions = (): string => {
+    switch (providerTab) {
+      case 'temu': return t('empty.instructionsTemu');
+      case 'allegro-pl': return t('empty.instructionsAllegroPl');
+      case 'allegro-cz': return t('empty.instructionsAllegroCz');
+      case 'aliexpress': return t('empty.instructionsAliexpress');
+      default: return t('empty.instructionsAll');
+    }
+  };
+
+  const getGoToLabel = (): string => {
+    switch (providerTab) {
+      case 'temu': return t('empty.goToTemu');
+      case 'allegro-pl': return t('empty.goToAllegroPl');
+      case 'allegro-cz': return t('empty.goToAllegroCz');
+      default: return t('empty.goToAliexpress');
+    }
+  };
+
   return (
     <div className="flex flex-col bg-gray-50 text-gray-900" style={{ minHeight: 'var(--popup-height)' }}>
       {/* Header */}
       <header className="bg-blue-600 text-white px-4 py-3 flex items-center justify-between shadow-md">
         <div className="flex items-center gap-2">
           <ShoppingBag size={20} />
-          <h1 className="text-sm font-semibold">My Purchases Collector</h1>
+          <h1 className="text-sm font-semibold">{t('header.title')}</h1>
         </div>
-        <StatusBadge status={status} orderCount={orders.length} />
+        <div className="flex items-center gap-2">
+          <StatusBadge status={status} orderCount={orders.length} />
+          <LanguageSelector />
+        </div>
       </header>
 
       {/* Provider tabs */}
@@ -212,7 +237,7 @@ export default function App() {
                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
             }`}
           >
-            {PROVIDER_LABELS[tab]}
+            {t(PROVIDER_TAB_KEYS[tab])}
           </button>
         ))}
       </div>
@@ -224,7 +249,7 @@ export default function App() {
           className="flex items-center gap-1 text-xs px-3 py-1.5 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors"
         >
           <ExternalLink size={14} />
-          Open Orders
+          {t('actions.openOrders')}
         </button>
 
         {/* Auto-collect button */}
@@ -234,23 +259,23 @@ export default function App() {
             className="flex items-center gap-1 text-xs px-3 py-1.5 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition-colors"
           >
             <Square size={14} />
-            Stop
+            {t('actions.stop')}
           </button>
         ) : (
           <button
             onClick={handleStartAutoCollect}
             className="flex items-center gap-1 text-xs px-3 py-1.5 bg-orange-50 text-orange-700 rounded-md hover:bg-orange-100 transition-colors"
-            title="Auto-scroll through all order pages to collect everything"
+            title={t('actions.collectAllTitle')}
           >
             <Play size={14} />
-            Collect All
+            {t('actions.collectAll')}
           </button>
         )}
 
         <button
           onClick={() => { loadOrders(); loadStatus(); }}
           className="flex items-center gap-1 text-xs px-2 py-1.5 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
-          title="Refresh"
+          title={t('actions.refresh')}
         >
           <RefreshCw size={14} />
         </button>
@@ -262,7 +287,7 @@ export default function App() {
           disabled={orders.length === 0}
           className="text-xs px-3 py-1.5 bg-green-50 text-green-700 rounded-md hover:bg-green-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Export ({orders.length})
+          {t('actions.export', { count: orders.length })}
         </button>
         <button
           onClick={handleClearAll}
@@ -278,8 +303,8 @@ export default function App() {
         <div className="px-4 py-2 bg-orange-50 border-b border-orange-100 flex items-center gap-2">
           <Loader2 size={14} className="text-orange-600 animate-spin" />
           <span className="text-xs text-orange-700">
-            Collecting... page {autoCollect.currentPage}
-            {autoCollect.totalOrders > 0 && ` (${autoCollect.totalOrders} orders)`}
+            {t('autoCollect.collecting', { page: autoCollect.currentPage })}
+            {autoCollect.totalOrders > 0 && ` ${t('autoCollect.orders', { count: autoCollect.totalOrders })}`}
           </span>
         </div>
       )}
@@ -301,34 +326,20 @@ export default function App() {
       <div className="flex-1 overflow-y-auto">
         {loading ? (
           <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
-            Loading...
+            {t('loading')}
           </div>
         ) : orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
             <ShoppingBag size={40} className="text-gray-300 mb-3" />
-            <p className="text-sm text-gray-500 mb-1">No orders collected yet</p>
+            <p className="text-sm text-gray-500 mb-1">{t('empty.noOrders')}</p>
             <p className="text-xs text-gray-400">
-              {providerTab === 'temu'
-                ? 'Open your Temu orders page and browse through them. Orders will be captured automatically.'
-                : providerTab === 'allegro-pl'
-                  ? 'Open your Allegro.pl orders page and browse through them. Orders will be captured automatically.'
-                  : providerTab === 'allegro-cz'
-                    ? 'Open your Allegro.cz orders page and browse through them. Orders will be captured automatically.'
-                    : providerTab === 'aliexpress'
-                      ? 'Open your AliExpress orders page and browse through them. Orders will be captured automatically.'
-                      : 'Open your AliExpress, Temu, or Allegro orders page and browse through them. Orders will be captured automatically.'}
+              {getEmptyInstructions()}
             </p>
             <button
               onClick={handleOpenOrders}
               className="mt-4 text-xs px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
-              {providerTab === 'temu'
-                ? 'Go to Temu Orders'
-                : providerTab === 'allegro-pl'
-                  ? 'Go to Allegro.pl Orders'
-                  : providerTab === 'allegro-cz'
-                    ? 'Go to Allegro.cz Orders'
-                    : 'Go to AliExpress Orders'}
+              {getGoToLabel()}
             </button>
           </div>
         ) : (
@@ -338,7 +349,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="px-4 py-2 bg-white border-t border-gray-200 text-[10px] text-gray-400 text-center">
-        My Purchases Collector v0.3.0
+        {t('footer', { version: '0.3.0' })}
       </footer>
     </div>
   );
