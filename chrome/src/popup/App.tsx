@@ -23,6 +23,19 @@ function sendMessage(message: RuntimeMessage): Promise<RuntimeResponse> {
   return chrome.runtime.sendMessage(message);
 }
 
+function detectProviderTabFromUrl(url: string): ProviderTab | null {
+  try {
+    const hostname = new URL(url).hostname;
+    if (hostname.includes('aliexpress.com')) return 'aliexpress';
+    if (hostname.includes('temu.com')) return 'temu';
+    if (hostname.includes('allegro.pl') || hostname.includes('allegro.cz')) return 'allegro';
+    if (hostname.includes('amazon.')) return 'amazon';
+  } catch {
+    // Invalid URL, ignore
+  }
+  return null;
+}
+
 export default function App() {
   const { t } = useTranslation();
   const [orders, setOrders] = useState<OrderItem[]>([]);
@@ -38,6 +51,19 @@ export default function App() {
   });
 
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Auto-detect provider tab from current browser tab URL
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0];
+      if (activeTab?.url) {
+        const detected = detectProviderTabFromUrl(activeTab.url);
+        if (detected) {
+          setProviderTab(detected);
+        }
+      }
+    });
+  }, []);
 
   const loadOrders = useCallback(async () => {
     setLoading(true);
