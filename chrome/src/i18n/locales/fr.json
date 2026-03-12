@@ -6,7 +6,8 @@
     "all": "Tout",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Ouvrir les Commandes",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Ouvrez votre page de commandes Temu et parcourez-les. Les commandes seront capturées automatiquement.",
     "instructionsAllegro": "Ouvrez votre page de commandes Allegro (allegro.pl ou allegro.cz) et parcourez-les. Les commandes seront capturées automatiquement.",
     "instructionsAliexpress": "Ouvrez votre page de commandes AliExpress et parcourez-les. Les commandes seront capturées automatiquement.",
-    "instructionsAll": "Ouvrez votre page de commandes AliExpress, Temu ou Allegro et parcourez-les. Les commandes seront capturées automatiquement.",
+    "instructionsAmazon": "Ouvrez votre page de commandes Amazon et parcourez-les. Les commandes seront capturées automatiquement.",
+    "instructionsAll": "Ouvrez votre page de commandes AliExpress, Temu, Allegro ou Amazon et parcourez-les. Les commandes seront capturées automatiquement.",
     "goToTemu": "Aller aux Commandes Temu",
     "goToAllegro": "Aller aux Commandes Allegro",
-    "goToAliexpress": "Aller aux Commandes AliExpress"
+    "goToAliexpress": "Aller aux Commandes AliExpress",
+    "goToAmazon": "Aller aux Commandes Amazon"
   },
   "loading": "Chargement...",
   "footer": "Collecteur d'Achats v{{version}}",

@@ -6,7 +6,8 @@
     "all": "Semua",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Buka Pesanan",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Buka halaman pesanan Temu dan jelajahi. Pesanan akan ditangkap secara otomatis.",
     "instructionsAllegro": "Buka halaman pesanan Allegro (allegro.pl atau allegro.cz) dan jelajahi. Pesanan akan ditangkap secara otomatis.",
     "instructionsAliexpress": "Buka halaman pesanan AliExpress dan jelajahi. Pesanan akan ditangkap secara otomatis.",
-    "instructionsAll": "Buka halaman pesanan AliExpress, Temu, atau Allegro dan jelajahi. Pesanan akan ditangkap secara otomatis.",
+    "instructionsAmazon": "Buka halaman pesanan Amazon dan jelajahi. Pesanan akan ditangkap secara otomatis.",
+    "instructionsAll": "Buka halaman pesanan AliExpress, Temu, Allegro, atau Amazon dan jelajahi. Pesanan akan ditangkap secara otomatis.",
     "goToTemu": "Buka Pesanan Temu",
     "goToAllegro": "Buka Pesanan Allegro",
-    "goToAliexpress": "Buka Pesanan AliExpress"
+    "goToAliexpress": "Buka Pesanan AliExpress",
+    "goToAmazon": "Buka Pesanan Amazon"
   },
   "loading": "Memuat...",
   "footer": "Pengumpul Pembelian v{{version}}",

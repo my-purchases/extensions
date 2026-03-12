@@ -6,7 +6,8 @@
     "all": "전체",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "주문 열기",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Temu 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
     "instructionsAllegro": "Allegro 주문 페이지(allegro.pl 또는 allegro.cz)를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
     "instructionsAliexpress": "AliExpress 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
-    "instructionsAll": "AliExpress, Temu 또는 Allegro 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
+    "instructionsAmazon": "Amazon 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
+    "instructionsAll": "AliExpress, Temu, Allegro 또는 Amazon 주문 페이지를 열고 탐색하세요. 주문이 자동으로 캡처됩니다.",
     "goToTemu": "Temu 주문으로 이동",
     "goToAllegro": "Allegro 주문으로 이동",
-    "goToAliexpress": "AliExpress 주문으로 이동"
+    "goToAliexpress": "AliExpress 주문으로 이동",
+    "goToAmazon": "Amazon 주문으로 이동"
   },
   "loading": "로딩 중...",
   "footer": "구매 수집기 v{{version}}",

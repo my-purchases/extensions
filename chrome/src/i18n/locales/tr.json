@@ -6,7 +6,8 @@
     "all": "Tümü",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Siparişleri Aç",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Temu sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
     "instructionsAllegro": "Allegro sipariş sayfanızı (allegro.pl veya allegro.cz) açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
     "instructionsAliexpress": "AliExpress sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
-    "instructionsAll": "AliExpress, Temu veya Allegro sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
+    "instructionsAmazon": "Amazon sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
+    "instructionsAll": "AliExpress, Temu, Allegro veya Amazon sipariş sayfanızı açın ve göz atın. Siparişler otomatik olarak yakalanacaktır.",
     "goToTemu": "Temu Siparişlerine Git",
     "goToAllegro": "Allegro Siparişlerine Git",
-    "goToAliexpress": "AliExpress Siparişlerine Git"
+    "goToAliexpress": "AliExpress Siparişlerine Git",
+    "goToAmazon": "Amazon Siparişlerine Git"
   },
   "loading": "Yükleniyor...",
   "footer": "Satın Alma Toplayıcı v{{version}}",

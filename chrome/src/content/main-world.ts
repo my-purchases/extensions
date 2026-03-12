@@ -5,8 +5,13 @@
  * Sends captured data to the isolated-world script via window.postMessage().
  *
  * Multi-provider support:
- *   - Detects the current site (AliExpress, Temu, Allegro) from window.location.hostname
+ *   - Detects the current site (AliExpress, Temu, Allegro, Amazon) from window.location.hostname
  *   - Uses provider-specific URL patterns and data detection
+ *
+ * Amazon note:
+ *   - Amazon does NOT expose JSON APIs for order data — all pages return HTML.
+ *   - The main-world script on Amazon only handles provider detection and status notification.
+ *   - Actual order data extraction happens in isolated-world.ts via DOM parsing.
  *
  * AliExpress findings:
  *   - API endpoint: acs.aliexpress.com/h5/mtop.aliexpress.trade.buyer.order.list
@@ -19,7 +24,7 @@ const LOG_PREFIX = '[MPC:main]';
 
 // ─── Provider detection ─────────────────────────────────────
 
-type Provider = 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz' | 'unknown';
+type Provider = 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz' | 'amazon' | 'unknown';
 
 function detectProvider(): Provider {
   const hostname = window.location.hostname;
@@ -27,6 +32,7 @@ function detectProvider(): Provider {
   if (hostname.includes('temu.com')) return 'temu';
   if (hostname.includes('allegro.pl')) return 'allegro-pl';
   if (hostname.includes('allegro.cz')) return 'allegro-cz';
+  if (hostname.includes('amazon.')) return 'amazon';
   return 'unknown';
 }
 
@@ -99,6 +105,8 @@ function checkUrl(url: string): boolean {
   if (currentProvider === 'aliexpress') return isAliExpressOrderApiUrl(url);
   if (currentProvider === 'temu') return isTemuOrderApiUrl(url);
   if (currentProvider === 'allegro-pl' || currentProvider === 'allegro-cz') return isAllegroOrderApiUrl(url);
+  // Amazon does not use JSON APIs — order data is extracted from HTML DOM.
+  // No URL interception is needed.
   return false;
 }
 

@@ -6,7 +6,8 @@
     "all": "Alle",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Bestellungen öffnen",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Öffnen Sie Ihre Temu-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
     "instructionsAllegro": "Öffnen Sie Ihre Allegro-Bestellseite (allegro.pl oder allegro.cz) und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
     "instructionsAliexpress": "Öffnen Sie Ihre AliExpress-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
-    "instructionsAll": "Öffnen Sie Ihre AliExpress-, Temu- oder Allegro-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
+    "instructionsAmazon": "Öffnen Sie Ihre Amazon-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
+    "instructionsAll": "Öffnen Sie Ihre AliExpress-, Temu-, Allegro- oder Amazon-Bestellseite und durchsuchen Sie sie. Bestellungen werden automatisch erfasst.",
     "goToTemu": "Zu Temu-Bestellungen",
     "goToAllegro": "Zu Allegro-Bestellungen",
-    "goToAliexpress": "Zu AliExpress-Bestellungen"
+    "goToAliexpress": "Zu AliExpress-Bestellungen",
+    "goToAmazon": "Zu Amazon-Bestellungen"
   },
   "loading": "Laden...",
   "footer": "Einkaufs-Sammler v{{version}}",

@@ -1,23 +1,34 @@
 # My Purchases Collector — Chrome Extension
 
-A Chrome extension that automatically collects your AliExpress order data by intercepting API responses, and exports them to CSV, JSON, HTML, or clipboard. Fully compatible with the [My Resources](https://my-purchases.mobulum.com/) web app import format.
+A Chrome extension that automatically collects your order data from AliExpress, Temu, Allegro, and Amazon, and exports them to CSV, JSON, HTML, or clipboard. Fully compatible with the [My Resources](https://my-purchases.mobulum.com/) web app import format.
 
 ## Features
 
-- **Automatic API interception** — captures order data from AliExpress API responses as you browse (no scraping, no manual work)
-- **One-click "Collect All"** — automatically clicks "View orders" to load your entire order history
+- **Automatic data capture** — collects order data as you browse (API interception for AliExpress/Temu/Allegro, DOM parsing for Amazon)
+- **Amazon — 21 marketplaces** — supports amazon.com, amazon.de, amazon.co.uk, amazon.pl, amazon.fr, and 16 more regional domains
+- **One-click "Collect All"** — automatically loads your entire order history (Amazon: iterates through all years with pagination)
 - **Export formats** — CSV, JSON, HTML, or copy to clipboard (Google Sheets compatible)
 - **Web app compatible** — exported data matches the `AliexpressShopperInventoryItem` type used by the web app importer
 - **Privacy-first** — all data stored locally in your browser, zero tracking or analytics
-- **Filter & search** — filter orders by status (e.g. "Awaiting delivery") in the popup
+- **Filter & search** — filter orders by status (e.g. "Awaiting delivery") and by platform in the popup
 - **15 languages** — automatic browser language detection with manual override; supports English, 中文, Español, हिन्दी, العربية, Português, Français, Русский, 日本語, Deutsch, 한국어, Bahasa Indonesia, Türkçe, Italiano, Polski
 
 ## How It Works
 
-1. Install the extension and navigate to your [AliExpress order history](https://www.aliexpress.com/p/order/index.html)
-2. The extension intercepts AliExpress API responses (`batman.js` / BizPlugin format) and extracts order data
+### AliExpress, Temu, Allegro
+
+1. Install the extension and navigate to your order history page
+2. The extension intercepts API responses (AliExpress: `batman.js` / BizPlugin format; Temu/Allegro: respective order APIs) and extracts order data
 3. Click the extension icon to see collected orders, or use "Collect All" to load all pages automatically
 4. Export your data in your preferred format
+
+### Amazon
+
+1. Navigate to your Amazon order history page on any of the 21 supported marketplaces
+2. The extension automatically parses the rendered page and extracts order data (order ID, date, total, product titles, images, status)
+3. Use "Collect All" to iterate through all years and pages — the extension fetches each page in the background without navigating away
+4. Amazon uses client-side encryption (Siege CSD) on fetched pages — the extension requests the server-rendered fallback (`disableCsd`) to get parseable HTML
+5. Export your data in your preferred format
 
 ### Architecture
 
@@ -27,7 +38,7 @@ src/
 │   └── service-worker.ts
 ├── content/
 │   ├── main-world.ts   # MAIN world — intercepts fetch/XHR/JSONP
-│   └── isolated-world.ts  # ISOLATED world — bridge + auto-collect UI clicks
+│   └── isolated-world.ts  # ISOLATED world — bridge + auto-collect + Amazon DOM parsing
 ├── i18n/               # Internationalization
 │   ├── index.ts        # i18next config + language detection
 │   └── locales/        # Translation files (15 languages)
@@ -44,15 +55,19 @@ src/
 │   │   ├── parser.ts
 │   │   ├── interceptor.ts
 │   │   └── index.ts
-│   └── allegro/
-│       ├── parser.ts
-│       ├── interceptor.ts
+│   ├── allegro/
+│   │   ├── parser.ts
+│   │   ├── interceptor.ts
+│   │   └── index.ts
+│   └── amazon/
+│       ├── parser.ts       # HTML DOM parser (DOMParser + CSS selectors)
+│       ├── interceptor.ts  # URL matching, domain detection
 │       └── index.ts
 ├── shared/
-│   ├── constants.ts    # API patterns, storage keys
+│   ├── constants.ts    # API patterns, storage keys, Amazon domains
 │   └── messages.ts     # Message type definitions
 ├── types/
-│   └── order.ts        # OrderItem interface
+│   └── order.ts        # OrderItem interface, ProviderId type
 ├── storage/
 │   └── orders.ts       # CRUD for chrome.storage.local
 ├── export/
@@ -62,7 +77,7 @@ src/
 │   ├── clipboard.ts
 │   └── index.ts
 └── popup/
-    ├── App.tsx          # Main popup UI
+    ├── App.tsx          # Main popup UI (tabs per provider)
     ├── main.tsx
     ├── index.html
     ├── index.css
@@ -74,6 +89,15 @@ src/
         ├── StatusBadge.tsx
         └── LanguageSelector.tsx
 ```
+
+### Provider Architecture
+
+| Provider | Data Source | Collection Method | Auto-Collect |
+|----------|-----------|-------------------|-------------|
+| AliExpress | JSON API | `fetch`/`XHR`/JSONP interception in MAIN world | Clicks "Load more" button |
+| Temu | JSON API | `fetch`/`XHR` interception in MAIN world | Clicks pagination buttons |
+| Allegro | JSON API | `fetch`/`XHR` interception in MAIN world | Clicks pagination buttons |
+| Amazon | Server-rendered HTML | DOM parsing in ISOLATED world | Fetches pages with `disableCsd` param, iterates years |
 
 ## Development
 
@@ -123,6 +147,7 @@ npm test
 | `*://*.temu.com/*` | Intercept order API responses on Temu |
 | `*://*.allegro.pl/*` | Intercept order API responses on Allegro PL |
 | `*://*.allegro.cz/*` | Intercept order API responses on Allegro CZ |
+| `*://*.amazon.com/*` (+ 20 regional domains) | Parse order pages on Amazon (21 marketplaces) |
 
 ## Internationalization (i18n)
 

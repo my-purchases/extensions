@@ -6,7 +6,8 @@
     "all": "Tutti",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Apri Ordini",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Apri la pagina degli ordini Temu e sfogliali. Gli ordini verranno acquisiti automaticamente.",
     "instructionsAllegro": "Apri la pagina degli ordini Allegro (allegro.pl o allegro.cz) e sfogliali. Gli ordini verranno acquisiti automaticamente.",
     "instructionsAliexpress": "Apri la pagina degli ordini AliExpress e sfogliali. Gli ordini verranno acquisiti automaticamente.",
-    "instructionsAll": "Apri la pagina degli ordini AliExpress, Temu o Allegro e sfogliali. Gli ordini verranno acquisiti automaticamente.",
+    "instructionsAmazon": "Apri la pagina degli ordini Amazon e sfogliali. Gli ordini verranno acquisiti automaticamente.",
+    "instructionsAll": "Apri la pagina degli ordini AliExpress, Temu, Allegro o Amazon e sfogliali. Gli ordini verranno acquisiti automaticamente.",
     "goToTemu": "Vai agli Ordini Temu",
     "goToAllegro": "Vai agli Ordini Allegro",
-    "goToAliexpress": "Vai agli Ordini AliExpress"
+    "goToAliexpress": "Vai agli Ordini AliExpress",
+    "goToAmazon": "Vai agli Ordini Amazon"
   },
   "loading": "Caricamento...",
   "footer": "Raccoglitore Acquisti v{{version}}",
