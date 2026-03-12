@@ -6,7 +6,8 @@
     "all": "All",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Open Orders",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Open your Temu orders page and browse through them. Orders will be captured automatically.",
     "instructionsAllegro": "Open your Allegro orders page (allegro.pl or allegro.cz) and browse through them. Orders will be captured automatically.",
     "instructionsAliexpress": "Open your AliExpress orders page and browse through them. Orders will be captured automatically.",
-    "instructionsAll": "Open your AliExpress, Temu, or Allegro orders page and browse through them. Orders will be captured automatically.",
+    "instructionsAmazon": "Open your Amazon orders page and browse through them. Orders will be captured automatically.",
+    "instructionsAll": "Open your AliExpress, Temu, Allegro, or Amazon orders page and browse through them. Orders will be captured automatically.",
     "goToTemu": "Go to Temu Orders",
     "goToAllegro": "Go to Allegro Orders",
-    "goToAliexpress": "Go to AliExpress Orders"
+    "goToAliexpress": "Go to AliExpress Orders",
+    "goToAmazon": "Go to Amazon Orders"
   },
   "loading": "Loading...",
   "footer": "My Purchases Collector v{{version}}",

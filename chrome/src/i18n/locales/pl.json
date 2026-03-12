@@ -6,7 +6,8 @@
     "all": "Wszystkie",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Otwórz Zamówienia",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Otwórz stronę zamówień Temu i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
     "instructionsAllegro": "Otwórz stronę zamówień Allegro (allegro.pl lub allegro.cz) i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
     "instructionsAliexpress": "Otwórz stronę zamówień AliExpress i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
-    "instructionsAll": "Otwórz stronę zamówień AliExpress, Temu lub Allegro i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
+    "instructionsAmazon": "Otwórz stronę zamówień Amazon i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
+    "instructionsAll": "Otwórz stronę zamówień AliExpress, Temu, Allegro lub Amazon i przeglądaj je. Zamówienia zostaną przechwycone automatycznie.",
     "goToTemu": "Przejdź do zamówień Temu",
     "goToAllegro": "Przejdź do zamówień Allegro",
-    "goToAliexpress": "Przejdź do zamówień AliExpress"
+    "goToAliexpress": "Przejdź do zamówień AliExpress",
+    "goToAmazon": "Przejdź do zamówień Amazon"
   },
   "loading": "Ładowanie...",
   "footer": "Kolektor Zakupów v{{version}}",

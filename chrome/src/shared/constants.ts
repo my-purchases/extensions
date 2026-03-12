@@ -89,6 +89,100 @@ export const ALLEGRO_API_PATTERNS = [
   'myorder-api/myorder/',
 ] as const;
 
+// ─── Amazon ─────────────────────────────────────────────────
+
+/**
+ * All known Amazon marketplace domains.
+ * Used for provider detection, host permissions, and content script matching.
+ */
+export const AMAZON_DOMAINS = [
+  // Americas
+  'amazon.com',
+  'amazon.ca',
+  'amazon.com.mx',
+  'amazon.com.br',
+  // Europe
+  'amazon.co.uk',
+  'amazon.de',
+  'amazon.fr',
+  'amazon.it',
+  'amazon.es',
+  'amazon.nl',
+  'amazon.pl',
+  'amazon.se',
+  'amazon.com.be',
+  'amazon.com.tr',
+  // Middle East & Africa
+  'amazon.ae',
+  'amazon.sa',
+  'amazon.eg',
+  // Asia Pacific
+  'amazon.co.jp',
+  'amazon.in',
+  'amazon.com.au',
+  'amazon.sg',
+] as const;
+
+/** Amazon order page URL patterns (for tab detection in service worker) */
+export const AMAZON_ORDER_PATTERNS = [
+  '*://*.amazon.com/gp/css/order-history*',
+  '*://*.amazon.com/your-orders/orders*',
+  '*://*.amazon.ca/gp/css/order-history*',
+  '*://*.amazon.ca/your-orders/orders*',
+  '*://*.amazon.com.mx/gp/css/order-history*',
+  '*://*.amazon.com.mx/your-orders/orders*',
+  '*://*.amazon.com.br/gp/css/order-history*',
+  '*://*.amazon.com.br/your-orders/orders*',
+  '*://*.amazon.co.uk/gp/css/order-history*',
+  '*://*.amazon.co.uk/your-orders/orders*',
+  '*://*.amazon.de/gp/css/order-history*',
+  '*://*.amazon.de/your-orders/orders*',
+  '*://*.amazon.fr/gp/css/order-history*',
+  '*://*.amazon.fr/your-orders/orders*',
+  '*://*.amazon.it/gp/css/order-history*',
+  '*://*.amazon.it/your-orders/orders*',
+  '*://*.amazon.es/gp/css/order-history*',
+  '*://*.amazon.es/your-orders/orders*',
+  '*://*.amazon.nl/gp/css/order-history*',
+  '*://*.amazon.nl/your-orders/orders*',
+  '*://*.amazon.pl/gp/css/order-history*',
+  '*://*.amazon.pl/your-orders/orders*',
+  '*://*.amazon.se/gp/css/order-history*',
+  '*://*.amazon.se/your-orders/orders*',
+  '*://*.amazon.com.be/gp/css/order-history*',
+  '*://*.amazon.com.be/your-orders/orders*',
+  '*://*.amazon.com.tr/gp/css/order-history*',
+  '*://*.amazon.com.tr/your-orders/orders*',
+  '*://*.amazon.ae/gp/css/order-history*',
+  '*://*.amazon.ae/your-orders/orders*',
+  '*://*.amazon.sa/gp/css/order-history*',
+  '*://*.amazon.sa/your-orders/orders*',
+  '*://*.amazon.eg/gp/css/order-history*',
+  '*://*.amazon.eg/your-orders/orders*',
+  '*://*.amazon.co.jp/gp/css/order-history*',
+  '*://*.amazon.co.jp/your-orders/orders*',
+  '*://*.amazon.in/gp/css/order-history*',
+  '*://*.amazon.in/your-orders/orders*',
+  '*://*.amazon.com.au/gp/css/order-history*',
+  '*://*.amazon.com.au/your-orders/orders*',
+  '*://*.amazon.sg/gp/css/order-history*',
+  '*://*.amazon.sg/your-orders/orders*',
+] as const;
+
+/**
+ * Amazon order page path prefixes — used by content scripts
+ * to determine if the current page is an order history page.
+ */
+export const AMAZON_ORDER_PAGE_PATHS = [
+  '/gp/css/order-history',
+  '/your-orders/orders',
+] as const;
+
+/**
+ * Amazon orders per page (used for pagination startIndex increments).
+ */
+export const AMAZON_ORDERS_PER_PAGE = 10;
+
 /** Default popup dimensions */
 export const POPUP_WIDTH = 420;
 export const POPUP_HEIGHT = 560;

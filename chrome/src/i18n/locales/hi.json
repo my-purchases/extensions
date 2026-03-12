@@ -6,7 +6,8 @@
     "all": "सभी",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "ऑर्डर खोलें",
@@ -29,10 +30,12 @@
     "instructionsTemu": "अपना Temu ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
     "instructionsAllegro": "अपना Allegro ऑर्डर पेज (allegro.pl या allegro.cz) खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
     "instructionsAliexpress": "अपना AliExpress ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
-    "instructionsAll": "अपना AliExpress, Temu या Allegro ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
+    "instructionsAmazon": "अपना Amazon ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
+    "instructionsAll": "अपना AliExpress, Temu, Allegro या Amazon ऑर्डर पेज खोलें और ब्राउज़ करें। ऑर्डर स्वचालित रूप से कैप्चर किए जाएंगे।",
     "goToTemu": "Temu ऑर्डर पर जाएं",
     "goToAllegro": "Allegro ऑर्डर पर जाएं",
-    "goToAliexpress": "AliExpress ऑर्डर पर जाएं"
+    "goToAliexpress": "AliExpress ऑर्डर पर जाएं",
+    "goToAmazon": "Amazon ऑर्डर पर जाएं"
   },
   "loading": "लोड हो रहा है...",
   "footer": "मेरी खरीदारी कलेक्टर v{{version}}",

@@ -2,13 +2,14 @@
  * Service Worker (Manifest V3 background script).
  * Receives orders from content scripts, manages storage, handles export requests from popup.
  * Forwards auto-collect commands to content scripts via chrome.tabs.sendMessage.
- * Supports multiple providers: AliExpress (full parsing), Temu, and Allegro (PL + CZ).
+ * Supports multiple providers: AliExpress (full parsing), Temu, Allegro (PL + CZ), and Amazon.
  */
 
 import type { RuntimeMessage, RuntimeResponse, AutoCollectState } from '@/shared/messages';
 import { parseApiResponse } from '@/providers/aliexpress/parser';
 import { parseTemuApiResponse } from '@/providers/temu/parser';
 import { parseAllegroApiResponse } from '@/providers/allegro/parser';
+import { AMAZON_ORDER_PATTERNS } from '@/shared/constants';
 import {
   getOrders,
   mergeOrders,
@@ -69,6 +70,9 @@ async function handleMessage(
           parsed = parseTemuApiResponse(message._rawApiResponse);
         } else if (providerId === 'allegro-pl' || providerId === 'allegro-cz') {
           parsed = parseAllegroApiResponse(message._rawApiResponse, providerId as ProviderId);
+        } else if (providerId === 'amazon') {
+          // Amazon orders are parsed in the content script (DOMParser unavailable in SW).
+          // They arrive as pre-parsed OrderItem[] in message.orders — nothing to do here.
         } else {
           parsed = parseApiResponse(message._rawApiResponse);
         }
@@ -213,7 +217,7 @@ async function handleMessage(
     case 'START_AUTO_COLLECT': {
       const tab = await findOrderTab();
       if (!tab?.id) {
-        return { success: false, error: 'No orders page found. Open the AliExpress, Temu, or Allegro orders page first.' };
+        return { success: false, error: 'No orders page found. Open the AliExpress, Temu, Allegro, or Amazon orders page first.' };
       }
 
       try {
@@ -224,8 +228,21 @@ async function handleMessage(
           totalOrders: (await getOrders()).length,
         };
         return { success: true, autoCollect: autoCollectState };
-      } catch (err) {
-        return { success: false, error: `Failed to start: ${String(err)}` };
+      } catch {
+        // Content script not active (e.g. extension was reloaded) — reload tab and retry
+        try {
+          console.log(LOG_PREFIX, 'Content script not responding, reloading tab...');
+          await reloadTabAndWait(tab.id);
+          await chrome.tabs.sendMessage(tab.id, { type: 'START_AUTO_COLLECT' });
+          autoCollectState = {
+            isRunning: true,
+            currentPage: 0,
+            totalOrders: (await getOrders()).length,
+          };
+          return { success: true, autoCollect: autoCollectState };
+        } catch (retryErr) {
+          return { success: false, error: `Failed to start: ${String(retryErr)}. Try refreshing the orders page.` };
+        }
       }
     }
 
@@ -264,6 +281,32 @@ async function handleMessage(
 }
 
 // ─── Helpers ────────────────────────────────────────────────
+
+/**
+ * Re-inject content scripts by reloading the tab.
+ * Programmatic injection doesn't work with CRXJS's dynamic-import loader,
+ * so we reload the tab to trigger declarative content script injection.
+ * Waits for the tab to finish loading before returning.
+ */
+async function reloadTabAndWait(tabId: number): Promise<void> {
+  await chrome.tabs.reload(tabId);
+  await new Promise<void>((resolve) => {
+    const listener = (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+      if (updatedTabId === tabId && changeInfo.status === 'complete') {
+        chrome.tabs.onUpdated.removeListener(listener);
+        resolve();
+      }
+    };
+    chrome.tabs.onUpdated.addListener(listener);
+    // Timeout fallback — don't hang forever
+    setTimeout(() => {
+      chrome.tabs.onUpdated.removeListener(listener);
+      resolve();
+    }, 15000);
+  });
+  // Extra delay for content scripts to fully initialize
+  await new Promise((r) => setTimeout(r, 1000));
+}
 
 async function findOrderTab(): Promise<chrome.tabs.Tab | undefined> {
   // Try AliExpress first
@@ -309,6 +352,14 @@ async function findOrderTab(): Promise<chrome.tabs.Tab | undefined> {
   });
   if (allegroCZTabs.length > 0) {
     return allegroCZTabs.find((t) => t.active) ?? allegroCZTabs[0];
+  }
+
+  // Try Amazon (all marketplaces)
+  const amazonTabs = await chrome.tabs.query({
+    url: AMAZON_ORDER_PATTERNS as unknown as string[],
+  });
+  if (amazonTabs.length > 0) {
+    return amazonTabs.find((t) => t.active) ?? amazonTabs[0];
   }
 
   return undefined;

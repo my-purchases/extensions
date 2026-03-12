@@ -6,7 +6,8 @@
     "all": "الكل",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "فتح الطلبات",
@@ -29,10 +30,12 @@
     "instructionsTemu": "افتح صفحة طلبات Temu وتصفحها. سيتم التقاط الطلبات تلقائياً.",
     "instructionsAllegro": "افتح صفحة طلبات Allegro (allegro.pl أو allegro.cz) وتصفحها. سيتم التقاط الطلبات تلقائياً.",
     "instructionsAliexpress": "افتح صفحة طلبات AliExpress وتصفحها. سيتم التقاط الطلبات تلقائياً.",
-    "instructionsAll": "افتح صفحة طلبات AliExpress أو Temu أو Allegro وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "instructionsAmazon": "افتح صفحة طلبات Amazon وتصفحها. سيتم التقاط الطلبات تلقائياً.",
+    "instructionsAll": "افتح صفحة طلبات AliExpress أو Temu أو Allegro أو Amazon وتصفحها. سيتم التقاط الطلبات تلقائياً.",
     "goToTemu": "الذهاب إلى طلبات Temu",
     "goToAllegro": "الذهاب إلى طلبات Allegro",
-    "goToAliexpress": "الذهاب إلى طلبات AliExpress"
+    "goToAliexpress": "الذهاب إلى طلبات AliExpress",
+    "goToAmazon": "الذهاب إلى طلبات Amazon"
   },
   "loading": "جاري التحميل...",
   "footer": "جامع مشترياتي v{{version}}",

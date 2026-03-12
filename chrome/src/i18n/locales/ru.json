@@ -6,7 +6,8 @@
     "all": "Все",
     "aliexpress": "AliExpress",
     "temu": "Temu",
-    "allegro": "Allegro"
+    "allegro": "Allegro",
+    "amazon": "Amazon"
   },
   "actions": {
     "openOrders": "Открыть Заказы",
@@ -29,10 +30,12 @@
     "instructionsTemu": "Откройте страницу заказов Temu и просмотрите их. Заказы будут собраны автоматически.",
     "instructionsAllegro": "Откройте страницу заказов Allegro (allegro.pl или allegro.cz) и просмотрите их. Заказы будут собраны автоматически.",
     "instructionsAliexpress": "Откройте страницу заказов AliExpress и просмотрите их. Заказы будут собраны автоматически.",
-    "instructionsAll": "Откройте страницу заказов AliExpress, Temu или Allegro и просмотрите их. Заказы будут собраны автоматически.",
+    "instructionsAmazon": "Откройте страницу заказов Amazon и просмотрите их. Заказы будут собраны автоматически.",
+    "instructionsAll": "Откройте страницу заказов AliExpress, Temu, Allegro или Amazon и просмотрите их. Заказы будут собраны автоматически.",
     "goToTemu": "Перейти к заказам Temu",
     "goToAllegro": "Перейти к заказам Allegro",
-    "goToAliexpress": "Перейти к заказам AliExpress"
+    "goToAliexpress": "Перейти к заказам AliExpress",
+    "goToAmazon": "Перейти к заказам Amazon"
   },
   "loading": "Загрузка...",
   "footer": "Сборщик Покупок v{{version}}",

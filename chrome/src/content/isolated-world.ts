@@ -3,17 +3,28 @@
  * Runs in the extension's isolated context (world: "ISOLATED").
  * - Bridges window.postMessage from main-world to chrome.runtime.sendMessage
  * - Handles auto-collect: finds and clicks the pagination/"View orders" button
- * - Multi-provider aware: detects AliExpress vs Temu vs Allegro and uses appropriate selectors
+ * - Multi-provider aware: detects AliExpress vs Temu vs Allegro vs Amazon
+ *   and uses appropriate selectors / strategies
+ *
+ * Amazon-specific behavior:
+ *   - On page load, parses the live DOM for order data and sends to service worker
+ *   - Auto-collect uses fetch() + DOMParser to iterate through years and pages
+ *     without navigating away from the current page
+ *   - Amazon uses "Siege CSD" (Client-Side Decryption) — order data in fetched HTML
+ *     is encrypted. We append `disableCsd=missing-library` to fetch URLs so the
+ *     server returns unencrypted, server-rendered HTML instead.
  */
 
 import type { RuntimeMessage } from '@/shared/messages';
+import { AMAZON_ORDER_PAGE_PATHS, AMAZON_ORDERS_PER_PAGE, AMAZON_DOMAINS } from '@/shared/constants';
+import { parseAmazonOrdersHtml, extractTotalOrderCount, extractNextPageUrl } from '@/providers/amazon/parser';
 
 const MSG_PREFIX = 'MPC_';
 const LOG_PREFIX = '[MPC:isolated]';
 
 // ─── Provider detection ─────────────────────────────────────
 
-type Provider = 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz' | 'unknown';
+type Provider = 'aliexpress' | 'temu' | 'allegro-pl' | 'allegro-cz' | 'amazon' | 'unknown';
 
 function detectProvider(): Provider {
   const hostname = window.location.hostname;
@@ -21,6 +32,7 @@ function detectProvider(): Provider {
   if (hostname.includes('temu.com')) return 'temu';
   if (hostname.includes('allegro.pl')) return 'allegro-pl';
   if (hostname.includes('allegro.cz')) return 'allegro-cz';
+  if (AMAZON_DOMAINS.some((d) => hostname === d || hostname.endsWith('.' + d))) return 'amazon';
   return 'unknown';
 }
 
@@ -122,6 +134,7 @@ const ALLEGRO_LOAD_MORE_TEXTS = ['Pokaż więcej', 'Zobrazit více', 'Show more'
 function getLoadMoreSelectors(): string[] {
   if (currentProvider === 'temu') return TEMU_LOAD_MORE_SELECTORS;
   if (currentProvider === 'allegro-pl' || currentProvider === 'allegro-cz') return ALLEGRO_LOAD_MORE_SELECTORS;
+  // Amazon uses fetch-based auto-collect, not button clicking
   return ALIEXPRESS_LOAD_MORE_SELECTORS;
 }
 
@@ -215,11 +228,9 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function runAutoCollect(): Promise<void> {
-  autoCollectRunning = true;
-  autoCollectPage = 0;
-  reportProgress(0, false);
+// ─── Standard auto-collect (AliExpress, Temu, Allegro) ──────
 
+async function runAutoCollectStandard(): Promise<void> {
   while (autoCollectRunning) {
     autoCollectPage++;
 
@@ -250,6 +261,218 @@ async function runAutoCollect(): Promise<void> {
     // Pause between clicks to be gentle on the server
     await sleep(2000);
   }
+}
+
+// ─── Amazon auto-collect (year iteration + fetch pagination) ─
+
+/**
+ * Amazon auto-collect strategy:
+ * 1. Determine available years (current year down to oldest)
+ * 2. For each year, fetch order pages via fetch() (same-origin, cookies included)
+ * 3. Parse HTML with DOMParser, extract orders, send to service worker
+ * 4. Paginate within each year using startIndex
+ * 5. Stop when a year returns 0 orders
+ *
+ * This approach does NOT navigate away from the current page —
+ * the user stays on the orders page while collection runs in the background.
+ */
+
+/** Minimum year to check for orders (stop iterating if empty before this) */
+const AMAZON_MIN_YEAR = 2005;
+
+/** Number of consecutive empty years before stopping */
+const AMAZON_MAX_EMPTY_YEARS = 2;
+
+function getAmazonBaseUrl(): string {
+  return `${window.location.protocol}//${window.location.host}`;
+}
+
+function getAmazonDomainForParser(): string {
+  const hostname = window.location.hostname;
+  for (const domain of AMAZON_DOMAINS) {
+    if (hostname === domain || hostname.endsWith('.' + domain)) {
+      return domain;
+    }
+  }
+  return hostname;
+}
+
+/**
+ * Fetch an Amazon order page and return the HTML text.
+ * Uses same-origin fetch with credentials so session cookies are included.
+ *
+ * IMPORTANT: We append `disableCsd=missing-library` to the URL.
+ * Amazon uses "Siege Client-Side Decryption" (CSD) by default — order data
+ * (IDs, titles, prices, dates) is delivered as encrypted base64 blobs inside
+ * `<div class="csd-encrypted-sensitive">` elements. The `SiegeClientSideDecryption`
+ * JS library decrypts them at runtime, but DOMParser doesn't execute JavaScript.
+ * When the server sees `disableCsd`, it returns server-rendered, unencrypted HTML
+ * that our parser can read directly.
+ */
+async function fetchAmazonPage(url: string): Promise<string> {
+  const fetchUrl = new URL(url);
+  fetchUrl.searchParams.set('disableCsd', 'missing-library');
+
+  const response = await fetch(fetchUrl.toString(), {
+    credentials: 'include',
+    headers: {
+      'Accept': 'text/html,application/xhtml+xml',
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  return response.text();
+}
+
+/**
+ * Parse Amazon HTML and extract order data, then send to service worker.
+ * Parsing is done HERE in the content script because DOMParser is NOT
+ * available in the Service Worker context. The parsed OrderItem[] are
+ * sent directly — the service worker just merges them into storage.
+ *
+ * Returns the number of order items found on this page.
+ */
+function parseAndSendAmazonOrders(html: string, domain: string): number {
+  const orders = parseAmazonOrdersHtml(html, domain);
+
+  if (orders.length === 0) {
+    console.log(LOG_PREFIX, 'Amazon: no orders parsed from HTML');
+    return 0;
+  }
+
+  console.log(LOG_PREFIX, `Amazon: parsed ${orders.length} order items`);
+
+  // Send pre-parsed orders to service worker (no raw HTML — SW can't use DOMParser)
+  try {
+    chrome.runtime.sendMessage({
+      type: 'ORDERS_CAPTURED',
+      orders,
+      _providerId: 'amazon',
+    } as RuntimeMessage & { _providerId?: string });
+  } catch (err) {
+    console.error(LOG_PREFIX, 'Failed to send Amazon orders:', err);
+  }
+
+  return orders.length;
+}
+
+/**
+ * Extract total number of orders from Amazon page HTML.
+ * Uses the parser's extractTotalOrderCount which handles .num-orders span.
+ */
+function extractAmazonTotalOrders(html: string): number {
+  return extractTotalOrderCount(html);
+}
+
+/**
+ * Check if there's a next page in Amazon pagination.
+ * Uses the parser's extractNextPageUrl which checks .a-pagination .a-last.
+ */
+function amazonHasNextPage(html: string): boolean {
+  return extractNextPageUrl(html) !== null;
+}
+
+async function runAutoCollectAmazon(): Promise<void> {
+  const baseUrl = getAmazonBaseUrl();
+  const domain = getAmazonDomainForParser();
+  const currentYear = new Date().getFullYear();
+  let consecutiveEmptyYears = 0;
+  let totalPagesProcessed = 0;
+
+  console.log(LOG_PREFIX, `Amazon auto-collect starting. Base URL: ${baseUrl}, Years: ${currentYear} → ${AMAZON_MIN_YEAR}`);
+
+  // First, parse the current page (the one the user is looking at)
+  const currentPageOrders = parseAndSendAmazonOrders(document.documentElement.outerHTML, domain);
+  if (currentPageOrders > 0) {
+    totalPagesProcessed++;
+    reportProgress(totalPagesProcessed, false);
+  }
+
+  // Now iterate through years
+  for (let year = currentYear; year >= AMAZON_MIN_YEAR && autoCollectRunning; year--) {
+    console.log(LOG_PREFIX, `Amazon: collecting year ${year}...`);
+
+    // Fetch first page for this year
+    const firstPageUrl = `${baseUrl}/your-orders/orders?timeFilter=year-${year}&startIndex=0`;
+
+    let html: string;
+    try {
+      html = await fetchAmazonPage(firstPageUrl);
+    } catch (err) {
+      console.error(LOG_PREFIX, `Amazon: failed to fetch year ${year}:`, err);
+      // Continue to next year
+      continue;
+    }
+
+    await sleep(500); // Small delay to avoid hammering
+
+    const totalOrders = extractAmazonTotalOrders(html);
+    const ordersOnPage = parseAndSendAmazonOrders(html, domain);
+
+    if (ordersOnPage === 0 && totalOrders === 0) {
+      consecutiveEmptyYears++;
+      if (consecutiveEmptyYears >= AMAZON_MAX_EMPTY_YEARS) {
+        console.log(LOG_PREFIX, `Amazon: ${AMAZON_MAX_EMPTY_YEARS} consecutive empty years, stopping.`);
+        break;
+      }
+      continue;
+    }
+
+    consecutiveEmptyYears = 0;
+    totalPagesProcessed++;
+    reportProgress(totalPagesProcessed, false);
+
+    // Paginate within this year
+    if (totalOrders > AMAZON_ORDERS_PER_PAGE) {
+      let startIndex = AMAZON_ORDERS_PER_PAGE;
+
+      while (startIndex < totalOrders && autoCollectRunning) {
+        const pageUrl = `${baseUrl}/your-orders/orders?timeFilter=year-${year}&startIndex=${startIndex}`;
+
+        try {
+          const pageHtml = await fetchAmazonPage(pageUrl);
+          const pageOrders = parseAndSendAmazonOrders(pageHtml, domain);
+
+          if (pageOrders === 0) break; // No more orders on this page
+
+          totalPagesProcessed++;
+          reportProgress(totalPagesProcessed, false);
+
+          // Also check if there's actually a next page link
+          if (!amazonHasNextPage(pageHtml)) break;
+        } catch (err) {
+          console.error(LOG_PREFIX, `Amazon: failed to fetch page startIndex=${startIndex}:`, err);
+          break; // Stop pagination for this year on error
+        }
+
+        startIndex += AMAZON_ORDERS_PER_PAGE;
+
+        // Pause between requests to be gentle
+        await sleep(1500);
+      }
+    }
+
+    // Pause between years
+    await sleep(1000);
+  }
+
+  reportProgress(totalPagesProcessed, true);
+  console.log(LOG_PREFIX, `Amazon auto-collect finished. Total pages processed: ${totalPagesProcessed}`);
+}
+
+// ─── Unified auto-collect entry point ───────────────────────
+
+async function runAutoCollect(): Promise<void> {
+  autoCollectRunning = true;
+  autoCollectPage = 0;
+  reportProgress(0, false);
+
+  if (currentProvider === 'amazon') {
+    await runAutoCollectAmazon();
+  } else {
+    await runAutoCollectStandard();
+  }
 
   autoCollectRunning = false;
 }
@@ -269,6 +492,34 @@ function reportProgress(page: number, done: boolean, error?: string): void {
     } satisfies RuntimeMessage);
   } catch {
     // Extension context might be invalidated
+  }
+}
+
+// ─── Amazon: auto-parse on page load ────────────────────────
+// When the user navigates to an Amazon order page, automatically parse
+// the visible orders and send them to the service worker.
+
+if (currentProvider === 'amazon') {
+  const isOrderPage = AMAZON_ORDER_PAGE_PATHS.some((p) =>
+    window.location.pathname.startsWith(p),
+  );
+
+  if (isOrderPage) {
+    const parseCurrentPage = () => {
+      const domain = getAmazonDomainForParser();
+      const html = document.documentElement.outerHTML;
+      const count = parseAndSendAmazonOrders(html, domain);
+      console.log(LOG_PREFIX, `Amazon: auto-parsed ${count} orders from current page.`);
+    };
+
+    // Wait for the page to fully load before parsing
+    if (document.readyState === 'complete') {
+      setTimeout(parseCurrentPage, 1000);
+    } else {
+      window.addEventListener('load', () => {
+        setTimeout(parseCurrentPage, 1000);
+      });
+    }
   }
 }
 
@@ -304,4 +555,3 @@ chrome.runtime.onMessage.addListener(
     }
   },
 );
-

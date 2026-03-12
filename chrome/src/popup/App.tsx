@@ -9,13 +9,14 @@ import { StatusBadge } from './components/StatusBadge';
 import { LanguageSelector } from './components/LanguageSelector';
 import { ShoppingBag, RefreshCw, Trash2, ExternalLink, Play, Square, Loader2 } from 'lucide-react';
 
-type ProviderTab = 'all' | 'aliexpress' | 'temu' | 'allegro';
+type ProviderTab = 'all' | 'aliexpress' | 'temu' | 'allegro' | 'amazon';
 
 const PROVIDER_TAB_KEYS: Record<ProviderTab, string> = {
   all: 'tabs.all',
   aliexpress: 'tabs.aliexpress',
   temu: 'tabs.temu',
   allegro: 'tabs.allegro',
+  amazon: 'tabs.amazon',
 };
 
 function sendMessage(message: RuntimeMessage): Promise<RuntimeResponse> {
@@ -44,6 +45,8 @@ export default function App() {
       const appliedFilters: OrderFilters = { ...filters };
       if (providerTab === 'allegro') {
         appliedFilters.providerId = ['allegro-pl', 'allegro-cz'];
+      } else if (providerTab === 'amazon') {
+        appliedFilters.providerId = 'amazon';
       } else if (providerTab !== 'all') {
         appliedFilters.providerId = providerTab;
       }
@@ -161,6 +164,8 @@ export default function App() {
       chrome.tabs.create({ url: 'https://www.temu.com/bgt_orders.html' });
     } else if (providerTab === 'allegro') {
       chrome.tabs.create({ url: 'https://allegro.pl/moje-allegro/zakupy/kupione' });
+    } else if (providerTab === 'amazon') {
+      chrome.tabs.create({ url: 'https://www.amazon.com/gp/css/order-history' });
     } else {
       chrome.tabs.create({ url: 'https://www.aliexpress.com/p/order/index.html' });
     }
@@ -196,6 +201,7 @@ export default function App() {
       case 'temu': return t('empty.instructionsTemu');
       case 'allegro': return t('empty.instructionsAllegro');
       case 'aliexpress': return t('empty.instructionsAliexpress');
+      case 'amazon': return t('empty.instructionsAmazon');
       default: return t('empty.instructionsAll');
     }
   };
@@ -204,6 +210,7 @@ export default function App() {
     switch (providerTab) {
       case 'temu': return t('empty.goToTemu');
       case 'allegro': return t('empty.goToAllegro');
+      case 'amazon': return t('empty.goToAmazon');
       default: return t('empty.goToAliexpress');
     }
   };
@@ -224,7 +231,7 @@ export default function App() {
 
       {/* Provider tabs */}
       <div className="flex bg-white border-b border-gray-200">
-        {(['all', 'aliexpress', 'temu', 'allegro'] as ProviderTab[]).map((tab) => (
+        {(['all', 'aliexpress', 'temu', 'allegro', 'amazon'] as ProviderTab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setProviderTab(tab)}
@@ -346,7 +353,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="px-4 py-2 bg-white border-t border-gray-200 text-[10px] text-gray-400 text-center">
-        {t('footer', { version: '0.3.0' })}
+        {t('footer', { version: '0.4.0' })}
       </footer>
     </div>
   );

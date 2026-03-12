@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "My Purchases Collector",
-  "description": "Automatically collect and export your AliExpress, Temu, and Allegro orders to CSV, JSON, HTML, or clipboard.",
-  "version": "0.3.0",
+  "description": "Automatically collect and export your AliExpress, Temu, Allegro, and Amazon orders to CSV, JSON, HTML, or clipboard.",
+  "version": "0.4.0",
   "icons": {
     "16": "public/icons/icon16.png",
     "48": "public/icons/icon48.png",
@@ -17,7 +17,28 @@
     "*://*.aliexpress.com/*",
     "*://*.temu.com/*",
     "*://*.allegro.pl/*",
-    "*://*.allegro.cz/*"
+    "*://*.allegro.cz/*",
+    "*://*.amazon.com/*",
+    "*://*.amazon.ca/*",
+    "*://*.amazon.com.mx/*",
+    "*://*.amazon.com.br/*",
+    "*://*.amazon.co.uk/*",
+    "*://*.amazon.de/*",
+    "*://*.amazon.fr/*",
+    "*://*.amazon.it/*",
+    "*://*.amazon.es/*",
+    "*://*.amazon.nl/*",
+    "*://*.amazon.pl/*",
+    "*://*.amazon.se/*",
+    "*://*.amazon.com.be/*",
+    "*://*.amazon.com.tr/*",
+    "*://*.amazon.ae/*",
+    "*://*.amazon.sa/*",
+    "*://*.amazon.eg/*",
+    "*://*.amazon.co.jp/*",
+    "*://*.amazon.in/*",
+    "*://*.amazon.com.au/*",
+    "*://*.amazon.sg/*"
   ],
   "background": {
     "service_worker": "src/background/service-worker.ts"
@@ -32,49 +53,65 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.aliexpress.com/*"],
+      "matches": [
+        "*://*.aliexpress.com/*",
+        "*://*.temu.com/*",
+        "*://*.allegro.pl/*",
+        "*://*.allegro.cz/*",
+        "*://*.amazon.com/*",
+        "*://*.amazon.ca/*",
+        "*://*.amazon.com.mx/*",
+        "*://*.amazon.com.br/*",
+        "*://*.amazon.co.uk/*",
+        "*://*.amazon.de/*",
+        "*://*.amazon.fr/*",
+        "*://*.amazon.it/*",
+        "*://*.amazon.es/*",
+        "*://*.amazon.nl/*",
+        "*://*.amazon.pl/*",
+        "*://*.amazon.se/*",
+        "*://*.amazon.com.be/*",
+        "*://*.amazon.com.tr/*",
+        "*://*.amazon.ae/*",
+        "*://*.amazon.sa/*",
+        "*://*.amazon.eg/*",
+        "*://*.amazon.co.jp/*",
+        "*://*.amazon.in/*",
+        "*://*.amazon.com.au/*",
+        "*://*.amazon.sg/*"
+      ],
       "js": ["src/content/main-world.ts"],
       "world": "MAIN",
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.aliexpress.com/*"],
-      "js": ["src/content/isolated-world.ts"],
-      "world": "ISOLATED",
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.temu.com/*"],
-      "js": ["src/content/main-world.ts"],
-      "world": "MAIN",
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.temu.com/*"],
-      "js": ["src/content/isolated-world.ts"],
-      "world": "ISOLATED",
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.allegro.pl/*"],
-      "js": ["src/content/main-world.ts"],
-      "world": "MAIN",
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.allegro.pl/*"],
-      "js": ["src/content/isolated-world.ts"],
-      "world": "ISOLATED",
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.allegro.cz/*"],
-      "js": ["src/content/main-world.ts"],
-      "world": "MAIN",
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["*://*.allegro.cz/*"],
+      "matches": [
+        "*://*.aliexpress.com/*",
+        "*://*.temu.com/*",
+        "*://*.allegro.pl/*",
+        "*://*.allegro.cz/*",
+        "*://*.amazon.com/*",
+        "*://*.amazon.ca/*",
+        "*://*.amazon.com.mx/*",
+        "*://*.amazon.com.br/*",
+        "*://*.amazon.co.uk/*",
+        "*://*.amazon.de/*",
+        "*://*.amazon.fr/*",
+        "*://*.amazon.it/*",
+        "*://*.amazon.es/*",
+        "*://*.amazon.nl/*",
+        "*://*.amazon.pl/*",
+        "*://*.amazon.se/*",
+        "*://*.amazon.com.be/*",
+        "*://*.amazon.com.tr/*",
+        "*://*.amazon.ae/*",
+        "*://*.amazon.sa/*",
+        "*://*.amazon.eg/*",
+        "*://*.amazon.co.jp/*",
+        "*://*.amazon.in/*",
+        "*://*.amazon.com.au/*",
+        "*://*.amazon.sg/*"
+      ],
       "js": ["src/content/isolated-world.ts"],
       "world": "ISOLATED",
       "run_at": "document_start"
