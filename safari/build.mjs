@@ -30,6 +30,13 @@ const commonResolve = {
     '@': SRC,
     '@shared': SHARED,
   },
+  dedupe: [
+    'i18next',
+    'react-i18next',
+    'i18next-browser-languagedetector',
+    'react',
+    'react-dom',
+  ],
 };
 
 // ── Clean dist/ ─────────────────────────────────────────────

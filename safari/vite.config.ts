@@ -19,6 +19,13 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
       '@shared': resolve(__dirname, '../shared/src'),
     },
+    dedupe: [
+      'i18next',
+      'react-i18next',
+      'i18next-browser-languagedetector',
+      'react',
+      'react-dom',
+    ],
   },
   build: {
     outDir: 'dist',
