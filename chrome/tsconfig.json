@@ -17,7 +17,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@shared/*": ["../shared/src/*"]
     },
     "types": ["chrome", "vitest/globals"]
   },

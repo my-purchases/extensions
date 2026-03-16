@@ -4,22 +4,23 @@ on:
   push:
     branches: [master]
     paths:
+      - 'shared/**'
       - 'chrome/**'
+      - 'safari/**'
   pull_request:
     branches: [master]
     paths:
+      - 'shared/**'
       - 'chrome/**'
+      - 'safari/**'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  build-chrome:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: chrome
     steps:
       - uses: actions/checkout@v4
 
@@ -27,36 +28,104 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: chrome/package-lock.json
+          cache-dependency-path: |
+            shared/package-lock.json
+            chrome/package-lock.json
 
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npm run build
+      - name: Install shared dependencies
+        run: npm ci
+        working-directory: shared
 
-      - name: Create extension zip
+      - name: Install Chrome dependencies
+        run: npm ci
+        working-directory: chrome
+
+      - name: Typecheck shared
+        run: npx tsc --noEmit
+        working-directory: shared
+
+      - name: Typecheck Chrome
+        run: npx tsc --noEmit
+        working-directory: chrome
+
+      - name: Build Chrome extension
+        run: npm run build
+        working-directory: chrome
+
+      - name: Create Chrome extension zip
+        working-directory: chrome
         run: |
           cd dist
-          zip -r ../my-purchases-collector-${{ github.sha }}.zip .
+          zip -r ../my-purchases-collector-chrome-${{ github.sha }}.zip .
 
       - uses: actions/upload-artifact@v4
         with:
-          name: my-purchases-collector
-          path: chrome/my-purchases-collector-*.zip
+          name: my-purchases-collector-chrome
+          path: chrome/my-purchases-collector-chrome-*.zip
+
+  build-safari:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            shared/package-lock.json
+            safari/package-lock.json
+
+      - name: Install shared dependencies
+        run: npm ci
+        working-directory: shared
+
+      - name: Install Safari dependencies
+        run: npm ci
+        working-directory: safari
+
+      - name: Typecheck shared
+        run: npx tsc --noEmit
+        working-directory: shared
+
+      - name: Typecheck Safari
+        run: npx tsc --noEmit
+        working-directory: safari
+
+      - name: Build Safari extension
+        run: node build.mjs
+        working-directory: safari
+
+      - name: Create Safari extension zip
+        working-directory: safari
+        run: |
+          cd dist
+          zip -r ../my-purchases-collector-safari-${{ github.sha }}.zip .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: my-purchases-collector-safari
+          path: safari/my-purchases-collector-safari-*.zip
 
   release:
-    needs: build
+    needs: [build-chrome, build-safari]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: my-purchases-collector
+          name: my-purchases-collector-chrome
 
-      - name: Rename zip for release
+      - uses: actions/download-artifact@v4
+        with:
+          name: my-purchases-collector-safari
+
+      - name: Rename zips for release
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
           VERSION="${TAG#v}"
-          mv my-purchases-collector-*.zip "my-purchases-collector-${VERSION}.zip"
+          mv my-purchases-collector-chrome-*.zip "my-purchases-collector-chrome-${VERSION}.zip"
+          mv my-purchases-collector-safari-*.zip "my-purchases-collector-safari-${VERSION}.zip"
 
       - uses: softprops/action-gh-release@v2
         with:

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.local
+.vite/
+
+# Xcode user-specific data
+xcode/**/*.xcuserstate
+xcode/**/*.xcuserdatad/
