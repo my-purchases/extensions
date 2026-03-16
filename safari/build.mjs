@@ -65,11 +65,11 @@ await build({
         manualChunks(id) {
           // Split heavy vendor libraries into a separate chunk
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
-              return 'vendor-react';
-            }
             if (id.includes('i18next') || id.includes('react-i18next')) {
               return 'vendor-i18n';
+            }
+            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+              return 'vendor-react';
             }
             if (id.includes('lucide-react')) {
               return 'vendor-icons';

@@ -60,6 +60,7 @@ i18n
       pl: { translation: pl },
     },
     fallbackLng: 'en',
+    initImmediate: false, // Synchronous init — all resources are inline
     interpolation: {
       escapeValue: false, // React already handles escaping
     },
